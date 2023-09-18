@@ -10,8 +10,8 @@ class ServerThread:
         self.server = serverSocket.ServerSocket() 
         self.qcarControl = qcarControl.QcarControl() 
 
-        self.dataQueue = queue.Queue() 
-        self.responseQueue = queue.Queue() 
+        self.dataQueue = queue.Queue(10) 
+        self.responseQueue = queue.Queue(10) 
         self.queueLock = threading.Lock()
     
     def terminate(self): 

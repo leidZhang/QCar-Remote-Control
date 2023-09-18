@@ -1,6 +1,7 @@
-from socket import *
 import queue 
-import pickle  
+import pickle 
+from socket import *
+from utils import handleFullQueue  
 
 class ServerSocket: 
     def __init__(self) -> None: 
@@ -27,9 +28,9 @@ class ServerSocket:
                     data = connectionSocket.recv(1024)                  
                     receivedData = pickle.loads(data)
                     
-                    dataQueue.put(receivedData) 
-                    modifiedData = responseQueue.get()
-                    connectionSocket.sendall(modifiedData.encode()) 
+                    handleFullQueue(dataQueue, receivedData) 
+                    responseData = responseQueue.get()
+                    connectionSocket.sendall(pickle.dumps(responseData)) 
 
                 except Exception as e: 
                     print(e)

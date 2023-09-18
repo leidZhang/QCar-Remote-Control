@@ -1,3 +1,5 @@
+from queue import Full
+
 def stateToDict(state) -> dict:
     dict = {
         'x': state.contents.lX,
@@ -12,3 +14,9 @@ def stateToDict(state) -> dict:
     }
     return dict
 
+def handleFullQueue(dataQueue, data): 
+    try: 
+        dataQueue.put_nowait(data)
+    except Full: 
+        dataQueue.get() 
+        dataQueue.put_nowait(data)

@@ -1,15 +1,22 @@
 import queue 
 import threading 
 import clientSocket
-import controller
+import controller 
+import sys 
 
 class ClientThread: 
     def __init__(self): 
         self.client = clientSocket.clientSocket() 
         self.controller = controller.Controller() 
 
-        self.dataQueue = queue.Queue() 
+        self.dataQueue = queue.Queue(10) 
         self.queueLock = threading.Lock() 
+
+    def terminate(self): 
+        print("Attempting to stop the client")
+        self.controller.terminate() 
+        self.client.terminate() 
+        sys.exit()
     
     def run(self): 
         self.thread1 = threading.Thread(target=self.controller.run, name="Thread-1", args=(self.queueLock, self.dataQueue)) 
@@ -18,8 +25,5 @@ class ClientThread:
         self.thread1.start() 
         self.thread2.start()
 
-if __name__ == '__main__': 
-    c = ClientThread()
-    print("clientThread running") 
-    c.run() 
+
     

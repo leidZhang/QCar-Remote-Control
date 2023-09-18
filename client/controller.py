@@ -1,6 +1,7 @@
 import time 
 
 from utils import stateToDict
+from utils import handleFullQueue
 from logidrivepy import LogitechController
 
 class Controller: 
@@ -11,6 +12,7 @@ class Controller:
 
     def terminate(self) -> None: 
         self.controller.LogiSteeringShutdown()
+        print("Wheel controller stopped")
 
     def run(self, queueLock, dataQueue) -> None: 
         self.controller.LogiSteeringInitialize(True) 
@@ -22,7 +24,7 @@ class Controller:
             data = stateToDict(state) # convert DIJOYSTATE2ENGINES object to python dict object
 
             queueLock.acquire() 
-            dataQueue.put(data) 
+            handleFullQueue(dataQueue, data)
             queueLock.release()
 
             time.sleep(0.01)

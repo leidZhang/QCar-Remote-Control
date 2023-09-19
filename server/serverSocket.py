@@ -6,12 +6,17 @@ class ServerSocket:
         self.serverSocket = socket(AF_INET, SOCK_STREAM) 
         self.hostname = gethostname() 
         self.port = 8080 
+        self.stopFlag = False 
+
+    def terminate(self) -> None: 
+        self.serverSocket.close() 
+        self.stopFlag = True 
     
     def run(self, dataQueue, responseQueue) -> None: 
         self.serverSocket.bind((self.hostname, self.port))
         self.serverSocket.listen(1) 
 
-        while True: 
+        while not self.stopFlag: 
             print("The server is ready to accept information...") 
             connectionSocket, address = self.serverSocket.accept() 
             print(f"Connect to {address}") 

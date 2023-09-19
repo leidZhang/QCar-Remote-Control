@@ -1,5 +1,7 @@
 import queue 
+import sys 
 import threading 
+
 import serverSocket 
 import qcarControl 
 
@@ -11,6 +13,14 @@ class ServerThread:
         self.dataQueue = queue.Queue() 
         self.responseQueue = queue.Queue() 
         self.queueLock = threading.Lock() 
+
+    def terminate(self, signal, frame): 
+        print("Stopping Threads")
+
+        self.server.terminate() 
+        self.qcarController.termiante() 
+
+        sys.exit(0) 
     
     def run(self): 
         self.thread1 = threading.Thread(

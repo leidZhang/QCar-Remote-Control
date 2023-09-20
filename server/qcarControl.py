@@ -7,6 +7,9 @@ from utils import handleFullQueue
 from utils import statusToDict
 from constants import STEERING_MIN 
 from constants import ACCELERATOR_MAX
+from constants import BUTTON_A_INDEX 
+from constants import BUTTON_UP_INDEX 
+from constants import BUTTON_DOWN_INDEX 
 
 from Quanser.product_QCar import QCar
 from Quanser.q_ui import gamepadViaTarget
@@ -29,6 +32,7 @@ class QcarControl:
         self.reverseFlag = False 
         self.cuirseFlag = False 
         self.cuirseThrottle = 0 
+        self.lightFlag = False 
 
     def elapsedTime(self) -> None:
         return time.time() - self.startTime 
@@ -56,15 +60,24 @@ class QcarControl:
         return False 
     
     def handleButton(self, data) -> None: 
-        if self.buttonIsPressed(data, 4): 
+        if self.buttonIsPressed(data, BUTTON_UP_INDEX): 
             self.reverseFlag = not self.reverseFlag 
 
-        if self.buttonIsPressed(data, 5): 
+        if self.buttonIsPressed(data, BUTTON_DOWN_INDEX): 
             self.cuirseFlag = not self.cuirseFlag 
             self.cuirseThrottle = 0.3 * (-1 if self.reverseFlag else 1) * (32767 - int(data['y'])) / ACCELERATOR_MAX  
-    
+        if self.buttonIsPressed(data, BUTTON_A_INDEX): 
+            self.lightFlag = not self.lightFlag 
+ 
     def handleLEDs(self) -> None: 
-        # Adjust LED indicators based on steering and reverse indicators based on reverse gear
+        # turn on/off light 
+        if self.lightFlag: 
+            self.LEDs[6] = 1 
+            self.LEDs[7] = 1 
+        else: 
+            self.LEDs[6] = 0
+            self.LEDs[7] = 0                        
+        # Adjust LED indicators based on steering and reverse indicators based on reverse gear       
         if self.motorCommand[1] > 0.3:
             self.LEDs[0] = 1
             self.LEDs[2] = 1
@@ -72,7 +85,7 @@ class QcarControl:
             self.LEDs[1] = 1
             self.LEDs[3] = 1
         else: 
-            self.LEDs = np.array([0, 0, 0, 0, 0, 0, 0, 0])
+            self.LEDs = np.array([0, 0, 0, 0, 0, 0, self.LEDs[6], self.LEDs[7]])
 
         if self.motorCommand[0] < 0:
             self.LEDs[5] = 1

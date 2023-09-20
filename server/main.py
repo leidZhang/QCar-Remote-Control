@@ -1,19 +1,17 @@
-import signal
 import sys 
+import time 
+import signal
 
 from serverThread import ServerThread 
 
-def quit(sig, frame):
-    sys.exit(0)
-
 if __name__ == "__main__": 
-    signal.signal(signal.SIGINT, quit)
+    print("Starting server...")
 
-    try: 
-        s = ServerThread() 
-        print("Starting server...") 
-        # signal.signal(signal.SIGINT, s.terminate())
-        s.run() 
-    except: 
-        s.terminate() 
+    s = ServerThread() 
+    signal.signal(signal.SIGINT, s.terminate)
+    s.run() 
+
+    while True: # maintain mainThread 
+        time.sleep(100) 
+
     

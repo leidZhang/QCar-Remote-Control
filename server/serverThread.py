@@ -1,6 +1,6 @@
+import sys 
 import queue 
 import threading 
-import os 
 
 import serverSocket 
 import qcarControl 
@@ -14,25 +14,27 @@ class ServerThread:
         self.responseQueue = queue.Queue(10) 
         self.queueLock = threading.Lock()
     
-    def terminate(self): 
+    def terminate(self, signal, frame): 
+        print("Stopping server...") 
+
         self.server.terminate() 
         self.qcarControl.terminate() 
-        print("Server stopped") 
-        os._exit(0)
+        
+        sys.exit()  
     
     def run(self): 
         self.thread1 = threading.Thread(
             target=self.qcarControl.run, 
             name="Thread-1", 
             args=(self.queueLock, self.dataQueue, self.responseQueue)
-        )
+        )  
         self.thread2 = threading.Thread(
             target=self.server.run, 
             name="Thread-2", 
             args=(self.dataQueue, self.responseQueue)
         ) 
 
-        self.thread1.start() 
-        self.thread2.start() 
+        self.thread1.start() # activate qcarControl
+        self.thread2.start() # activate socket 
 
 

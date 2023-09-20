@@ -6,23 +6,26 @@ from utils import handleFullQueue
 class ServerSocket: 
     def __init__(self) -> None: 
         self.serverSocket = socket(AF_INET, SOCK_STREAM) 
+
         self.hostname = '0.0.0.0' 
         self.port = 8081 
+        self.done = False 
 
     def terminate(self): 
+        print("Stopping socket...")
+        self.done = True 
         self.serverSocket.close() 
-        print("Socket Stopped")
     
     def run(self, dataQueue, responseQueue) -> None: 
         self.serverSocket.bind((self.hostname, self.port))
         self.serverSocket.listen(1) 
 
-        while True: 
+        while not self.done: 
             print("The server is ready to accept information...") 
             connectionSocket, address = self.serverSocket.accept()
             print(f"Connected to {address}") 
-            running = True 
 
+            running = True 
             while running: 
                 try: 
                     data = connectionSocket.recv(1024)                  
@@ -36,8 +39,4 @@ class ServerSocket:
                     print(e)
                     running = False 
             
-            connectionSocket.close() 
-
-if __name__ == "__main__": 
-    s = ServerSocket() 
-    s.run() 
+            connectionSocket.close()  

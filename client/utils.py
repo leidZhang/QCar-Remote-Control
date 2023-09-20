@@ -10,7 +10,7 @@ def stateToDict(state) -> dict:
         'Rz': state.contents.lRz,
         'slider': state.contents.rglSlider[:],
         'pov': state.contents.rgdwPOV[:],
-        'buttons': state.contents.rgbButtons[:]
+        'buttons': state.contents.rgbButtons[:10]
     }
     return dict
 

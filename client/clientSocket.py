@@ -1,21 +1,23 @@
 import pickle
-import os 
 from socket import * 
+
+from utils import handleFullQueue
 
 class clientSocket: 
     def __init__(self) -> None:
         self.clientSocket = socket(AF_INET, SOCK_STREAM) 
         self.hostName = '10.0.0.3' 
         self.port = 8081 
+        self.done = False 
 
     def terminate(self): 
-        self.clientSocket.close() 
+        self.done = True 
         print("Socket stopped")
 
-    def run(self, queueLock, dataQueue) -> None: 
+    def run(self, queueLock, dataQueue, responseQueue) -> None: 
         self.clientSocket.connect((self.hostName, self.port)) 
 
-        while True: 
+        while not self.done: 
             queueLock.acquire() 
 
             if not dataQueue.empty(): 
@@ -25,10 +27,7 @@ class clientSocket:
 
                 response = self.clientSocket.recv(1024)
                 responseData = pickle.loads(response) 
-
-                os.system("cls") 
-                print(f"Linear Speed: {responseData['linearSpeed']}\nRemaining battery Capacity: {responseData['batteryCapacity']}\nMotor Throttle: {responseData['motorThrottle']}\nSteering: {responseData['steering']}\n")
-                
+                handleFullQueue(responseQueue, responseData) 
             else: 
                 queueLock.release()
                 

@@ -1,8 +1,9 @@
 import time 
+from logidrivepy import LogitechController
 
 from utils import stateToDict
-from utils import handleFullQueue
-from logidrivepy import LogitechController
+from utils import handleFullQueue 
+from cosntants import DEFALUT_DATA 
 
 class Controller: 
     def __init__(self) -> None:
@@ -11,20 +12,24 @@ class Controller:
         self.done = False 
 
     def terminate(self) -> None: 
+        self.done = True 
         self.controller.LogiSteeringShutdown()
         print("Wheel controller stopped")
 
     def run(self, queueLock, dataQueue) -> None: 
         self.controller.LogiSteeringInitialize(True) 
-        self.controller.LogiStopSpringForce(self.controllerIndex)
-
+        
         while not self.done: 
-            self.controller.LogiUpdate() # update every frame 
-            state = self.controller.LogiGetStateENGINES(self.controllerIndex) # get input from the wheel controller
-            data = stateToDict(state) # convert DIJOYSTATE2ENGINES object to python dict object
+            self.controller.LogiStopSpringForce(self.controllerIndex)
+            
+            if self.controller.LogiUpdate(): # update every frame 
+                state = self.controller.LogiGetStateENGINES(self.controllerIndex) # get input from the wheel controller
+                data = stateToDict(state) # convert DIJOYSTATE2ENGINES object to python dict object
 
-            queueLock.acquire() 
-            handleFullQueue(dataQueue, data)
-            queueLock.release()
+                if data == DEFALUT_DATA: continue # filt default value 
 
-            time.sleep(0.01)
+                queueLock.acquire() 
+                handleFullQueue(dataQueue, data)
+                queueLock.release()
+
+                time.sleep(0.01)

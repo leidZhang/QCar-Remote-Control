@@ -1,12 +1,15 @@
 import signal 
+import time 
+
 import clientThread 
 
 if __name__ == '__main__': 
-    try: 
-        c = clientThread.ClientThread()
-        print("Running clientThread") 
-        c.run() 
-    except: 
-        c.terminate()
+    print("Starting clientThread...")
+    c = clientThread.ClientThread()
+    signal.signal(signal.SIGINT, c.terminate)  
+    c.run() 
+
+    while True: # maintain mainThread 
+        time.sleep(100) 
     
     

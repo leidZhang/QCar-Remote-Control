@@ -8,15 +8,15 @@ class mainThread:
         self.client = None
 
     def run(self): 
-        thread1 = thread.Thread(target = self.server.run, name="Thread-1", args = (self.queueLock, self.dataQueue, self.responseQueue, self)) # 传递self作为参数
-        thread1.start() # 启动线程
+        thread1 = thread.Thread(target = self.server.run, name="Thread-1", args = (self.queueLock, self.dataQueue, self.responseQueue, self)) # self as arguemnt 
+        thread1.start() # activate thread1
         
-        while self.clientIP == '': # 等待客户端IP地址被赋值
+        while self.clientIP == '': # waiting self.clientIP
             time.sleep(100) 
         
-        self.client = clientSocket.ClientSocket(self.clientIP) # 根据客户端IP地址创建clientSocket对象
-        thread2 = thread.Thread(target=self.client.run, name="Thread-2") # 创建线程
-        thread2.start() # 启动线程
+        self.client = clientSocket.ClientSocket(self.clientIP) # create ClientSocket
+        thread2 = thread.Thread(target=self.client.run, name="Thread-2") # create thread2
+        thread2.start() # activate thread2
 
 class ServerSocket: 
     def __init__(self) -> None: 
@@ -31,7 +31,7 @@ class ServerSocket:
         self.done = True 
         self.serverSocket.close() 
     
-    def run(self, dataQueue, responseQueue, mainThread) -> None: # 接收mainThread作为参数
+    def run(self, dataQueue, responseQueue, mainThread) -> None: # get mainThread 
         self.serverSocket.bind((self.hostname, self.port))
         self.serverSocket.listen(1) 
 
@@ -40,7 +40,7 @@ class ServerSocket:
             connectionSocket, address = self.serverSocket.accept()
             print(f"Connected to {address}") 
 
-            mainThread.clientIP = address[0] # 将客户端IP地址赋值给mainThread的属性
+            mainThread.clientIP = address[0] # assign value to mainThread.clientIP i.e. self.clientIP in mainThread 
 
             running = True 
             while running: 

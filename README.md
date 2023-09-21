@@ -84,5 +84,8 @@ Once the server and client are running, ensure your Logitech steering wheel cont
 - Toggle Lights On/Off:
   <br>Press A button on the steering wheel controller to turn the QCar's light on and off, enhancing visibility during different conditions.
 
+## Future Work 
+Implement video data streaming from the QCar to the workstation.
+
 ## License
 This project is licensed under the Apache-2.0 license - see the LICENSE file for details.

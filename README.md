@@ -30,6 +30,31 @@ Then, follow these steps:
 ```
 git clone https://github.com/leidZhang/QCarSteeringControl.git
 ```
+
+The package directory layout is organized as follows: 
+```
+QCarSteeringControl
+|   LICENSE.txt
+|   README.md
+|
++---client
+|   |   clientSocket.py
+|   |   clientThread.py
+|   |   controller.py
+|   |   constants.py
+|   |   main.py
+|   |   ui.py
+|   |   utils.py
+|
++---server
+    |   constants.py
+    |   main.py
+    |   qcarControl.py
+    |   serverSocket.py
+    |   serverThread.py
+    |   utils.py 
+```
+
 2. On your QCar, navigate to the project folder and use the following command to run the server:
 ```
 cd server

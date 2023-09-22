@@ -69,7 +69,8 @@ python3 main.py
 4. Control your QCar using Logitech steering wheel controller.
 
 ### Note 
-Before you start the client, you have to change the value of self.hostname (QCar's ip address) in the clientSocket.py. Alternatively, uncomment `# self.hostName = input("Enter QCar IP address: ")` to manually input the ip address after the client starts. 
+1. Before you start the client, you have to change the value of self.hostname (QCar's ip address) in the clientSocket.py. Alternatively, uncomment `# self.hostName = input("Enter QCar IP address: ")` to manually input the ip address after the client starts.
+2. Sometimes the index steering wheel controller is identified as 1, make sure the input of the correct device is listened. 
 
 ## Usage 
 Once the server and client are running, ensure your Logitech steering wheel controller is properly connected to your workstation.

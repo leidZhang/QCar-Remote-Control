@@ -31,7 +31,7 @@ Then, follow these steps:
 git clone https://github.com/leidZhang/QCarSteeringControl.git
 ```
 
-The package directory layout is organized as follows: 
+The project directory layout is organized as follows: 
 ```
 QCarSteeringControl
 |   LICENSE.txt

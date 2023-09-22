@@ -17,7 +17,8 @@ class Controller:
         print("Wheel controller stopped")
 
     def checkController(self) -> None: 
-        data = self.controller.LogiGetStateENGINES(self.controllerIndex) 
+        state = self.controller.LogiGetStateENGINES(self.controllerIndex) 
+        data = stateToDict(state) 
         if data != INITIAL_DATA: 
             print(f"Cannot get input from the device {self.controllerIndex}") 
             self.terminate()  

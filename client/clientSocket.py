@@ -10,7 +10,7 @@ class clientSocket:
         self.port = 8081 
         self.done = False 
 
-    def terminate(self): 
+    def terminate(self) -> None: 
         self.done = True 
         self.clientSocket.close()
         print("Socket stopped")

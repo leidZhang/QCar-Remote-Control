@@ -34,7 +34,7 @@ class QcarControl:
         self.cuirseThrottle = 0 
         self.lightFlag = False 
 
-    def elapsedTime(self) -> None:
+    def elapsedTime(self) -> float: 
         return time.time() - self.startTime 
     
     def terminate(self) -> None: 

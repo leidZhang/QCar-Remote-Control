@@ -65,7 +65,7 @@ sudo python3 main.py
 3. On your workstation, navigate to the project folder and use the following command to run the client:
 ```
 cd client
-sudo python3 main.py
+python3 main.py
 ```
 4. Control your QCar using Logitech steering wheel controller.
 

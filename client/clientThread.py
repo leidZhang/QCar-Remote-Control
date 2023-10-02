@@ -23,6 +23,10 @@ class ClientThread:
         self.client.terminate() 
         self.ui.terminate() 
 
+        self.thread1.join() 
+        self.thread2.join() 
+        self.thread3.join()
+
         sys.exit()
     
     def run(self): 
@@ -30,9 +34,9 @@ class ClientThread:
         self.thread2 = threading.Thread(target=self.client.run, name="Thread-2", args=(self.queueLock, self.dataQueue, self.responseQueue)) 
         self.thread3 = threading.Thread(target=self.ui.run, name="Thread-3", args=(self.responseQueue, ))
 
-        self.thread1.start() # activate controller 
-        self.thread2.start() # activate client socket 
-        self.thread3.start() # activate ui 
+        self.thread1.start() 
+        self.thread2.start()
+        self.thread3.start() 
 
 
     

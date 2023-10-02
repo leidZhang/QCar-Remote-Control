@@ -1,7 +1,7 @@
 import os 
 import time 
 
-from cosntants import DISPLAY_THRESHOLD 
+from constants import DISPLAY_THRESHOLD 
 
 class UI: 
     def __init__(self) -> None: 
@@ -23,10 +23,10 @@ class UI:
                 if currentTime - self.lastPlayTime >= DISPLAY_THRESHOLD and self.data != None: 
                     os.system("cls") 
 
-                    print(f"Linear Speed: {round(self.data['linearSpeed'], 2)}m/s") 
-                    print(f"Remaining battery Capacity: {round(self.data['batteryCapacity'], 2)}%")
-                    print(f"Motor Throttle: {round(self.data['motorThrottle'], 2)}% PWM") 
-                    print(f"Steering: {round(self.data['steering'], 2)} rad") 
+                    print("Linear Speed: {}m/s".format(round(self.data['linearSpeed'], 2))) 
+                    print("Remaining battery Capacity: {}%".format(round(self.data['batteryCapacity'], 2)))
+                    print("Motor Throttle: {}% PWM".format(round(self.data['motorThrottle'], 2))) 
+                    print("Steering: {} rad".format(round(self.data['steering'], 2))) 
 
                     self.lastPlayTime = currentTime 
 

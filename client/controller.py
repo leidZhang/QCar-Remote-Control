@@ -3,38 +3,42 @@ from logidrivepy import LogitechController
 
 from utils import stateToDict
 from utils import handleFullQueue 
-from cosntants import INITIAL_DATA 
+from constants import INITIAL_DATA
 
 class Controller: 
     def __init__(self) -> None:
         self.controller = LogitechController()
         self.controllerIndex = 0 
         self.done = False 
+        self.state = None 
 
     def terminate(self) -> None: 
         self.done = True 
         self.controller.LogiSteeringShutdown()
-        print("Wheel controller stopped")
-
+        print("Wheel controller stopped") 
+    
     def checkController(self) -> None: 
-        state = self.controller.LogiGetStateENGINES(self.controllerIndex) 
-        data = stateToDict(state) 
+        for i in range(2): # update 2 times to capture the wrong data
+            self.controller.LogiUpdate(self.controllerIndex) 
+
+        self.state = self.controller.LogiGetStateENGINES(self.controllerIndex) 
+        data = stateToDict(self.state) 
+        
         if data != INITIAL_DATA: 
             print(f"Cannot get input from the device {self.controllerIndex}") 
-            self.terminate()  
+            self.terminate() 
 
     def run(self, queueLock, dataQueue) -> None: 
         self.controller.LogiSteeringInitialize(True) 
+        self.checkController() 
         
-        while not self.done: 
-            self.controller.LogiStopSpringForce(self.controllerIndex)
-            self.checkController() # make sure the correct controller is listened 
-            
+        print("Accepting controller input now...")
+        while self.controller.LogiIsConnected(self.controllerIndex) and not self.done: 
             if self.controller.LogiUpdate(): # update every frame 
-                state = self.controller.LogiGetStateENGINES(self.controllerIndex) # get input from the wheel controller
-                data = stateToDict(state) # convert DIJOYSTATE2ENGINES object to python dict object
+                self.state = self.controller.LogiGetStateENGINES(self.controllerIndex) # get input from the wheel controller
+                data = stateToDict(self.state) # convert DIJOYSTATE2ENGINES object to python dict object
 
-                if data == INITIAL_DATA: continue # filter initial value 
+                if data == INITIAL_DATA: continue # filt default value 
 
                 queueLock.acquire() 
                 handleFullQueue(dataQueue, data)

@@ -4,7 +4,7 @@ import signal
 
 from serverThread import ServerThread 
 
-if __name__ == "__main__": 
+if __name__ == "__main__": # main 
     print("Starting server...")
 
     s = ServerThread() 

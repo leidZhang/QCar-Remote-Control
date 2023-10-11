@@ -11,7 +11,7 @@ class InitUI:
             'operation_mode': None, 
             'ip': None, 
             'port': None, 
-            'device': None, 
+            'spawn_point': None, 
             'controller': None, 
             'vedio': None 
         }
@@ -19,7 +19,7 @@ class InitUI:
             'operation_mode': None, 
             'ip': None, 
             'port': None, 
-            'device': None, 
+            'spawn_point': None, 
             'controller': None, 
             'vedio': None 
         }
@@ -43,14 +43,14 @@ class InitUI:
         self.values['ip'] = tk.Entry(self.root, width=20) 
         port_label = tk.Label(self.root, text="Port", font=("Arial", 10)) 
         self.values['port'] = tk.Entry(self.root, width=10) 
-        device_label = tk.Label(self.root, text="Device ", font=("Arial", 10)) 
-        self.values['device'] = tk.Entry(self.root, width=5)
+        spawn_label = tk.Label(self.root, text="Spawn ", font=("Arial", 10)) 
+        self.values['spawn_point'] = tk.Entry(self.root, width=5)
         ip_label.place(x=50, y=80) 
         self.values['ip'].place(x=110, y=80) 
         port_label.place(x=280, y=80) 
         self.values['port'].place(x=320, y=80)
-        device_label.place(x=420, y=80)
-        self.values['device'].place(x=480, y=80) 
+        spawn_label.place(x=420, y=80)
+        self.values['spawn_point'].place(x=480, y=80) 
 
         # controller selection 
         self.values['controller'] = tk.StringVar() 
@@ -110,3 +110,5 @@ class InitUI:
 if __name__ == "__main__": 
     init_ui = InitUI() 
     init_ui.run() 
+    # print("gui destroyed")
+    # print(init_ui.settings['operation_mode'])

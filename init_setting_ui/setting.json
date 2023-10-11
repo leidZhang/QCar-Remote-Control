@@ -1,1 +1,1 @@
-{"operation_mode": "remote", "ip": "192.168.0.1", "port": "8080", "spawn_point": "0", "controller": "wheel", "vedio": "qcar"}
+{"operation_mode": "remote", "ip": "192.168.0.1", "port": "8080", "spawn_point": "27", "controller": "wheel", "vedio": "qlab", "device": "0"}

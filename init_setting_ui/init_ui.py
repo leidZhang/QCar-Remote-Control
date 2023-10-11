@@ -13,7 +13,8 @@ class InitUI:
             'port': None, 
             'spawn_point': None, 
             'controller': None, 
-            'vedio': None 
+            'vedio': None,
+            'device': None
         }
         self.settings = {
             'operation_mode': None, 
@@ -21,13 +22,14 @@ class InitUI:
             'port': None, 
             'spawn_point': None, 
             'controller': None, 
-            'vedio': None 
+            'vedio': None, 
+            'device': None
         }
 
     def initialize_ui(self) -> None: 
         self.root.title("QCar remote control") 
         # set panel size 
-        self.root.geometry("650x300") 
+        self.root.geometry("700x300") 
         
         # operating mode selection 
         self.values['operation_mode'] = tk.StringVar() 
@@ -45,12 +47,16 @@ class InitUI:
         self.values['port'] = tk.Entry(self.root, width=10) 
         spawn_label = tk.Label(self.root, text="Spawn ", font=("Arial", 10)) 
         self.values['spawn_point'] = tk.Entry(self.root, width=5)
+        device_label = tk.Label(self.root, text="Device", font=("Arial", 10))
+        self.values['device'] = tk.Entry(self.root, width=5)
         ip_label.place(x=50, y=80) 
         self.values['ip'].place(x=110, y=80) 
         port_label.place(x=280, y=80) 
         self.values['port'].place(x=320, y=80)
         spawn_label.place(x=420, y=80)
         self.values['spawn_point'].place(x=480, y=80) 
+        device_label.place(x=550, y=80)
+        self.values['device'].place(x=600, y=80) 
 
         # controller selection 
         self.values['controller'] = tk.StringVar() 
@@ -83,11 +89,11 @@ class InitUI:
             with open("setting.json", "r") as json_file: 
                 self.settings = json.load(json_file) 
 
-        for key, val in self.settings.items(): 
-            if isinstance(self.values[key], tk.Entry): 
-                self.values[key].insert(0, val) 
-            else: 
-                self.values[key].set(val)  
+            for key, val in self.settings.items(): 
+                if isinstance(self.values[key], tk.Entry): 
+                    self.values[key].insert(0, val) 
+                else: 
+                    self.values[key].set(val)  
 
     def handle_apply(self) -> None: 
         for key, val in self.values.items(): 

@@ -5,7 +5,7 @@ sys.path.append('src/')
 from common.constants import BUTTON_UP_INDEX
 from common.constants import BUTTON_DOWN_INDEX 
 from common.constants import BUTTON_A_INDEX
-from common.constants import BUTTON_B_INDEX 
+from common.constants import BUTTON_XBOX_INDEX 
 
 class WheelControllerStrategy(ABC): 
     @abstractmethod
@@ -33,5 +33,5 @@ class WheelLightFlagStrategy(WheelControllerStrategy):
 
 class WheelSafeFlagStrategy(WheelControllerStrategy): 
     def execute(self, controller, flags) -> None:
-        if controller.button_is_pressed(controller.index, BUTTON_B_INDEX): 
+        if controller.button_is_pressed(controller.index, BUTTON_XBOX_INDEX): 
             flags['safe'] = not flags['safe']

@@ -21,8 +21,10 @@ This project was tested with the Logitech G920 Driving Force Racing Wheel contro
 - Quanser QCar
 
 ## Installation 
-To install and run this project, you need to have logidrivepy package, numpy package and Logitech G Hub installed on your workstation. 
+To install and run this project, you need to have some packages and Logitech G Hub installed on your workstation. 
 - numpy: `pip install numpy`
+- keyboard: `pip install keyborad`
+- tkinter: `pip install tkinter`
 - logidrivepy: `pip install logidrivepy`
 - Logitech G Hub: https://www.logitechg.com/en-ca/innovation/g-hub.html
 

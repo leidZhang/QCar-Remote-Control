@@ -37,19 +37,21 @@ git clone https://github.com/leidZhang/QCarSteeringControl.git
 2. On your QCar, navigate to the project folder and use the following command to run the server:
 ```
 cd server
-sudo python3 main.py
+./run/sh
 ```
 3. On your workstation, navigate to the project folder and use the following command to run the client:
 ```
 cd client
 python3 main.py
 ```
-4. Control your QCar using Logitech steering wheel controller.
+4. Configure the settings using the GUI.
+5. Control your QCar.
 
 ### Note 
 1. Before you start the client, you have to change the value of self.hostname (QCar's ip address) in the clientSocket.py. Alternatively, uncomment `# self.hostName = input("Enter QCar IP address: ")` to manually input the ip address after the client starts.
 2. Sometimes the device connected to the workstation is identified as device 1, make sure the correct device is being listened. You can change the value of self.controllerIndex in the controller.py
-3. This branch is used for developing new features, may have some errors
+3. You can choose to only control QCar in the virtual environment 
+4. This branch is used for developing new features, may have some errors
 
 ## Usage 
 Once the server and client are running, ensure your Logitech steering wheel controller is properly connected to your workstation.

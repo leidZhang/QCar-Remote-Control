@@ -37,7 +37,7 @@ git clone https://github.com/leidZhang/QCarSteeringControl.git
 2. On your QCar, navigate to the project folder and use the following command to run the server:
 ```
 cd server
-./run/sh
+./run.sh
 ```
 3. On your workstation, navigate to the project folder and use the following command to run the client:
 ```

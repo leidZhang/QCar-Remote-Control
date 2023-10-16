@@ -10,6 +10,10 @@ sys.path.append('src/')
 from service.service_module import ServiceModule
 from common.utils import handle_full_queue
 from common.utils import status_to_dict 
+from strategies.qcar_control_strategies import LightStrategy 
+from strategies.qcar_control_strategies import ReverseStrategy 
+from strategies.qcar_control_strategies import CruiseStrategy 
+from strategies.qcar_control_strategies import SafeStrategy 
 
 class QCarControl(ServiceModule):  
     def __init__(self) -> None: 
@@ -21,6 +25,12 @@ class QCarControl(ServiceModule):
 
         self.motor_command = np.array([0.0, 0.0]) 
         self.LEDs = np.array([0, 0, 0, 0, 0, 0, 0, 0])
+        self.control_strategies = [
+            LightStrategy(), 
+            ReverseStrategy(), 
+            CruiseStrategy(), 
+            SafeStrategy(), 
+        ]
     
     def terminate(self) -> None: 
         print("Stopping QCar...")
@@ -61,6 +71,10 @@ class QCarControl(ServiceModule):
                 queue_lock.acquire() 
                 if not control_queue.empty(): 
                     self.state = control_queue.get()  
+
+                    # execute strategies 
+                    for strategy in self.control_strategies: 
+                        strategy.execute(self) 
 
                     # handle control 
                     throttle = 0.3 * self.state['throttle'] 

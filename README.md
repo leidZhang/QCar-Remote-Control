@@ -43,6 +43,7 @@ cd server
 3. On your workstation, navigate to the project folder and use the following command to run the client:
 ```
 cd client
+cd src
 python3 main.py
 ```
 4. Configure the settings using the GUI.

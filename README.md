@@ -21,12 +21,13 @@ This project was tested with the Logitech G920 Driving Force Racing Wheel contro
 - Quanser QCar
 
 ## Installation 
-To install and run this project, you need to have some packages and Logitech G Hub installed on your workstation. 
+To install and run this project, you need to have some packages, QLab and Logitech G Hub installed on your workstation. 
 - numpy: `pip install numpy`
 - keyboard: `pip install keyborad`
 - tkinter: `pip install tkinter`
 - logidrivepy: `pip install logidrivepy`
 - Logitech G Hub: https://www.logitechg.com/en-ca/innovation/g-hub.html
+- quanser package and QLab are provided by Quanser
 
 Then, follow these steps: 
 1. Clone this repository to your workstation and your QCar. You can use the following comand:
@@ -48,12 +49,13 @@ python3 main.py
 5. Control your QCar.
 
 ### Note 
-1. Sometimes the device connected to the workstation is identified as device 1, make sure the correct device is being listened. You can change the value of self.controllerIndex in the controller.py
-2. You can choose to only control QCar in the virtual environment 
-3. This branch is used for developing new features, may have some errors
+1. Sometimes the device connected to the workstation is identified as device 1, make sure the correct device is being listened.
+2. The spawn point 19 is not available
 
 ## Usage 
-Once the server and client are running, ensure your Logitech steering wheel controller is properly connected to your workstation.
+You can choose to only control QCar in the virtual environment or control the QCar in both virtual environment and the real world. 
+
+For Logitech steering wheel controller
 - Steering: 
   <br>Turn the steering wheel left or right to steer the QCar in the respective direction.
 - Throttle:
@@ -64,7 +66,21 @@ Once the server and client are running, ensure your Logitech steering wheel cont
   <br>Press Up button on the steering wheel controller to enable and diable the reverse function.
 - Toggle Lights On/Off:
   <br>Press A button on the steering wheel controller to turn the QCar's light on and off, enhancing visibility during different conditions.
-
+- Safe Mode: 
+  <br>Press XBOX button on the steering wheel controller to lock/unlock the QCar.
+For Keyboard controller
+- Steering:
+  <br>Press 'a' or 'd' to steer the QCar in the respective direction.
+- Throttle:
+  <br>Press 'w' to increase speed. You can stop the QCar by press 's'. 
+- Cruise Control:
+  <br>Press 'q' to engage and disengage cruise control, maintaining a steady speed.
+- Reverse:
+  <br>Press 'e' to enable and diable the reverse function.
+- Toggle Lights On/Off:
+  <br>Press 'l' to turn the QCar's light on and off, enhancing visibility during different conditions.
+- Safe Mode:
+  <br>Press '/' to lock/unlock the QCar.
 ## Update 
 - <b>2023-09-26:</b> Refactored code to satisfy SOLID principle
 - <b>2023-10-11:</b> Initial setting GUI

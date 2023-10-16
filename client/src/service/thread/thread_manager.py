@@ -27,9 +27,8 @@ class ThreadManager(ServiceModule):
     def terminate(self) -> None:
         for thread in self.init_strategies: 
             thread.terminate() 
-            thread.join()
-        # exit the program
-        os._exit(0)
+            thread.join() 
+        os._exit(0) # exit the program 
 
     def is_valid(self) -> bool:
         pass 

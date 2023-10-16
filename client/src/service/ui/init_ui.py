@@ -1,4 +1,5 @@
 import os
+import sys 
 import json 
 import tkinter as tk 
 from tkinter import ttk 
@@ -13,7 +14,7 @@ class InitUI:
             'port': None, 
             'spawn_point': None, 
             'controller': None, 
-            'video': None,
+            'vedio': None,
             'device': None
         }
         self.settings = {
@@ -22,7 +23,7 @@ class InitUI:
             'port': None, 
             'spawn_point': None, 
             'controller': None, 
-            'video': None,
+            'vedio': None, 
             'device': None
         }
 
@@ -95,13 +96,13 @@ class InitUI:
         logi_gamepad_button.place(x=240, y=140)
         keyboard_button.place(x=450, y=140)
 
-        # video stream source
-        self.values['video'] = tk.StringVar()
-        video_stream_label = tk.Label(self.root, text="Video Stream Source", font=("Arial", 14))
-        qlab_sensor_button = ttk.Radiobutton(self.root, text="QLab", variable=self.values['video'], value="qlab")
-        qcar_sensor_button = ttk.Radiobutton(self.root, text="QCar", variable=self.values['video'], value="qcar")
-        no_sensor_button = ttk.Radiobutton(self.root, text="Run Without Video Stream Source", variable=self.values['video'], value="none")
-        video_stream_label.place(x=50, y=170)
+        # vedio stream source
+        self.values['vedio'] = tk.StringVar() 
+        vedio_stream_label = tk.Label(self.root, text="Vedio Stream Source", font=("Arial", 14)) 
+        qlab_sensor_button = ttk.Radiobutton(self.root, text="QLab", variable=self.values['vedio'], value="qlab") 
+        qcar_sensor_button = ttk.Radiobutton(self.root, text="QCar", variable=self.values['vedio'], value="qcar") 
+        no_sensor_button = ttk.Radiobutton(self.root, text="Run Without Vedio Stream Source", variable=self.values['vedio'], value="none") 
+        vedio_stream_label.place(x=50, y=170) 
         qcar_sensor_button.place(x=50, y=200) 
         qlab_sensor_button.place(x=120, y=200) 
         no_sensor_button.place(x=190, y=200) 
@@ -174,8 +175,8 @@ class InitUI:
         self.apply_initial_states() 
         self.root.mainloop() 
 
-if __name__ == "__main__":
-    init_ui = InitUI()
-    init_ui.run()
-    print("gui destroyed")
-    print(type(init_ui.settings['device']))
+# if __name__ == "__main__": 
+#     init_ui = InitUI() 
+#     init_ui.run() 
+#     print("gui destroyed")
+#     print(type(init_ui.settings['device']))

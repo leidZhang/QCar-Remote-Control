@@ -4,7 +4,7 @@ import time
 import numpy as np  
 import queue  
 # quanser packages 
-sys.path.append('dependencies/quanser') # start from project root 
+sys.path.append('dependencies/q_libs') # start from project root 
 from numpy.core.numeric import zeros_like 
 from lib_qcar import QCarTask
 from lib_utilities import GPS, Controllers, Camera2D, LaneDetector, RoadMap, QLabsWorkspace, Other
@@ -66,12 +66,8 @@ class VirtualControl(ServiceModule):
         else: 
             self.LEDs = np.array([0, 0, 0, 0, 0, 0, self.LEDs[6], self.LEDs[7]])
 
-        if self.state['throttle'] < 0:
-            self.LEDs[5] = 1
-
     def terminate(self) -> None:
-        self.done = True
-        self.my_car.terminate()
+        self.done = True 
         print("Virtual Control terminated") 
 
     def is_valid(self) -> bool:
@@ -97,6 +93,9 @@ class VirtualControl(ServiceModule):
                     throttle = 0.3 * self.state['throttle'] # config here 
                     steering = 0.5 * self.state['steering']
 
+                    os.system("cls") 
+                    print("throttle:", throttle, "steering:", steering)
+
                     # handle LEDs 
                     self.handle_LEDs() 
 
@@ -105,4 +104,21 @@ class VirtualControl(ServiceModule):
             print(e) 
         finally: 
             self.my_car.terminate() 
-            os._exit(0)
+            os._exit(0) 
+
+if __name__ == "__main__": 
+    q = queue.Queue(10)
+    state = {
+            'throttle': 0.1, 
+            'steering': 0, 
+            'cruise_throttle': 0, 
+            'control_flags': {
+                'safe': False, 
+                'reverse': False, 
+                'light': False, 
+                'cruise': False, 
+            }
+        }
+    q.put(state)  
+    v = VirtualControl("10") 
+    v.run(q) 

@@ -72,7 +72,7 @@ For Logitech steering wheel controller
   
 <br>For Keyboard controller
 - Steering:
-  <br>Press 'A' or 'd' to steer the QCar in the respective direction.
+  <br>Press 'A' or 'D' to steer the QCar in the respective direction.
 - Throttle:
   <br>Press 'W' to increase speed. You can stop the QCar by pressing 'S'. 
 - Cruise Control:

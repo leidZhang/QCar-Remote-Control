@@ -48,10 +48,10 @@ class KeyboardController(ServiceModule, Controller):
         os._exit(0)         
 
     def normalize_steering(self, y_axis_signal) -> float:
-        return y_axis_signal / 200 
+        return y_axis_signal / 5000 
     
     def normalize_throttle(self, x_axis_signal) -> float:
-        return x_axis_signal / 100 
+        return x_axis_signal / 3000 
 
     def run(self, queue_lock, remote_queue, local_queue) -> None:  
         for strategy in self.control_strategies: 
@@ -61,21 +61,21 @@ class KeyboardController(ServiceModule, Controller):
         while not self.done: 
             if keyboard.is_pressed('w'): 
                 throttle += 2 
-                if throttle > 100: 
-                    throttle = 100  
+                if throttle > 3000: 
+                    throttle = 3000  
             else: 
                 throttle -= 2 
                 if throttle <= 0: 
                     throttle = 0 
 
             if keyboard.is_pressed('a'): 
-                steering += 1.75 
-                if steering > 200: 
-                    steering = 200 
+                steering += 1 
+                if steering > 5000: 
+                    steering = 5000 
             elif keyboard.is_pressed('d'): 
-                steering -= 1.75 
-                if steering < -200: 
-                    steering = -200
+                steering -= 1 
+                if steering < -5000: 
+                    steering = -5000
 
             if keyboard.is_pressed('`'): 
                 self.terminate() 

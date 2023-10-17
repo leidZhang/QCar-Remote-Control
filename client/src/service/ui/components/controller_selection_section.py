@@ -2,7 +2,7 @@ import sys
 import tkinter as tk 
 from tkinter import ttk
 
-sys.path.append('src/ui/') 
+sys.path.append('src/service/ui/') 
 from components.ui_component import UIComponent 
 
 class ControllerSelectionSection(UIComponent): 

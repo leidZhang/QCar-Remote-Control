@@ -5,7 +5,7 @@ import tkinter as tk
 from tkinter import ttk 
 from tkinter import messagebox
 
-sys.path.append('src/service') 
+sys.path.append('src/service/') 
 from ui.components.controller_selection_section import ControllerSelectionSection 
 from ui.components.operation_mode_section import OperationModeSection 
 from ui.components.qcar_control_setting_section import QCarControlSettingSection 

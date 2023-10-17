@@ -1,7 +1,7 @@
 import sys 
 import tkinter as tk 
 
-sys.path.append('src/ui/') 
+sys.path.append('src/service/ui/')  
 from components.ui_component import UIComponent 
 
 class QCarControlSettingSection(UIComponent): 

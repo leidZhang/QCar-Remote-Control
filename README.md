@@ -69,6 +69,7 @@ For Logitech steering wheel controller
   <br>Press A button on the steering wheel controller to turn the QCar's light on and off, enhancing visibility during different conditions.
 - Safe Mode: 
   <br>Press XBOX button on the steering wheel controller to lock/unlock the QCar.
+  
 <br>For Keyboard controller
 - Steering:
   <br>Press 'a' or 'd' to steer the QCar in the respective direction.

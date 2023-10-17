@@ -72,15 +72,15 @@ For Logitech steering wheel controller
   
 <br>For Keyboard controller
 - Steering:
-  <br>Press 'a' or 'd' to steer the QCar in the respective direction.
+  <br>Press 'A' or 'd' to steer the QCar in the respective direction.
 - Throttle:
-  <br>Press 'w' to increase speed. You can stop the QCar by press 's'. 
+  <br>Press 'W' to increase speed. You can stop the QCar by pressing 'S'. 
 - Cruise Control:
-  <br>Press 'q' to engage and disengage cruise control, maintaining a steady speed.
+  <br>Press 'Q' to engage and disengage cruise control, maintaining a steady speed.
 - Reverse:
-  <br>Press 'e' to enable and diable the reverse function.
+  <br>Press 'E' to enable and diable the reverse function.
 - Toggle Lights On/Off:
-  <br>Press 'l' to turn the QCar's light on and off, enhancing visibility during different conditions.
+  <br>Press 'L' to turn the QCar's light on and off, enhancing visibility during different conditions.
 - Safe Mode:
   <br>Press '/' to lock/unlock the QCar.
 ## Update 

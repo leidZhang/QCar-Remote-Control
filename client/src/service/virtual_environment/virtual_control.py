@@ -40,7 +40,7 @@ class VirtualControl(ServiceModule):
         desired_nodes = [self.start_node, self.end_node] # [start_node, end_node] 
 
         style = 'right' 
-        # generate pathway
+        # generate pathway to get the correct direction 
         self.road_map = RoadMap(style) 
         closed_circuit = self.road_map.generate_waypoints(desired_nodes, factor = 10)
         pathway = self.road_map.pathway

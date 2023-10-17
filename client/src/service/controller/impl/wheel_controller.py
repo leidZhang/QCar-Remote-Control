@@ -86,6 +86,7 @@ class WheelController(ServiceModule, Controller):
 
                 for strategy in self.control_strategies: 
                     strategy.execute(self.controller, self.state) 
+                # os.system("cls") 
                 # print(self.state) 
 
                 time.sleep(0.01)

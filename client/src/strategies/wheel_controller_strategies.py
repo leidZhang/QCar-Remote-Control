@@ -18,9 +18,6 @@ class WheelReverseFlagStrategy(WheelControllerStrategy):
             state['reverse'] = not state['reverse'] 
 
 class WheelCruiseFlagStrategy(WheelControllerStrategy): 
-    def __init__(self) -> None:
-        self.cruise_throttle = 0 
-
     def execute(self, controller, state) -> None:
         if controller.button_is_pressed(controller.index, BUTTON_DOWN_INDEX): 
             state['cruise'] = not state['cruise']

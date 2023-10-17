@@ -14,7 +14,7 @@ from strategies.keyboard_controller_strategies import KeyboardReverseFlagStrateg
 from strategies.keyboard_controller_strategies import KeyboardLightFlagStrategy 
 from strategies.keyboard_controller_strategies import KeyboardSafeFlagStrategy 
 
-class KeyboardController(ServiceModule, Controller): # this is a prototype class, may violate SOLID principle
+class KeyboardController(ServiceModule, Controller):  
     def __init__(self, mode) -> None: 
         self.mode = mode 
         self.done = False
@@ -30,7 +30,7 @@ class KeyboardController(ServiceModule, Controller): # this is a prototype class
             }
         }
 
-        self.control_strategies = [
+        self.control_strategies = [ # add more strategies here if needed 
             KeyboardSafeFlagStrategy(self, '/'), 
             KeyboardReverseFlagStrategy(self, 'e'), 
             KeyboardBrakeStrategy(self, 's'), 
@@ -48,7 +48,7 @@ class KeyboardController(ServiceModule, Controller): # this is a prototype class
         os._exit(0)         
 
     def normalize_steering(self, y_axis_signal) -> float:
-        return y_axis_signal / 100 
+        return y_axis_signal / 200 
     
     def normalize_throttle(self, x_axis_signal) -> float:
         return x_axis_signal / 100 
@@ -81,19 +81,16 @@ class KeyboardController(ServiceModule, Controller): # this is a prototype class
                 self.terminate() 
 
             self.state['throttle'] = self.normalize_throttle(throttle)
-            self.state['steering'] = self.normalize_steering(steering)
-
-            os.system("cls")
-            print(self.state) 
+            self.state['steering'] = self.normalize_steering(steering) 
 
             queue_lock.acquire()
             handle_full_queue(remote_queue, self.state)
             handle_full_queue(local_queue, self.state)
             queue_lock.release()
             
-# if __name__ == "__main__": 
-#     q1 = queue.Queue(10)
-#     q2 = queue.Queue(10)
-#     k = KeyboardController('keyboard') 
-#     l = threading.Lock() 
-#     k.run(l, q1, q2) 
+if __name__ == "__main__": 
+    q1 = queue.Queue(10)
+    q2 = queue.Queue(10)
+    k = KeyboardController('keyboard') 
+    l = threading.Lock() 
+    k.run(l, q1, q2) 

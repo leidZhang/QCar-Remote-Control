@@ -1,3 +1,4 @@
+import os 
 import sys 
 import time 
 sys.path.append('src/') 
@@ -12,6 +13,8 @@ if __name__ == "__main__":
         while not done: # waiting SIGINT signal
             time.sleep(100)
     except KeyboardInterrupt: 
+        done = True 
         t.terminate()  
     finally: 
-        print("System stopped")
+        print("System stopped") 
+        os._exit(0) # exit the program 

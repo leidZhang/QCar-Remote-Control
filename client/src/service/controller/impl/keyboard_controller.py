@@ -69,15 +69,13 @@ class KeyboardController(ServiceModule, Controller): # this is a prototype class
                     throttle = 0 
 
             if keyboard.is_pressed('a'): 
-                steering += 1 
-                if steering > 100: 
-                    steering = 100 
+                steering += 1.75 
+                if steering > 200: 
+                    steering = 200 
             elif keyboard.is_pressed('d'): 
-                steering -= 1 
-                if steering < -100: 
-                    steering = -100
-            else: 
-                steering = 0
+                steering -= 1.75 
+                if steering < -200: 
+                    steering = -200
 
             if keyboard.is_pressed('`'): 
                 self.terminate() 

@@ -90,7 +90,7 @@ class VirtualControl(ServiceModule):
                     for strategy in self.virtual_qcar_strategies: 
                         strategy.execute(self) 
                     # handle control
-                    throttle = 0.3 * self.state['throttle'] # config here 
+                    throttle = 0.75 * self.state['throttle'] # config here 
                     steering = 0.5 * self.state['steering']
 
                     os.system("cls") 

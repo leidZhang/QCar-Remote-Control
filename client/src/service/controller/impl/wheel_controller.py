@@ -21,32 +21,25 @@ class WheelController(ServiceModule, Controller):
         self.controller = LogitechController() 
         self.index = index 
         self.done = False 
-        self.throttle = 0 
-        self.steering = 0
-        
-        self.control_flags = {  # add more flags if needed 
-            'safe': True,
-            'reverse': False, 
-            'light': False, 
-            'cruise': False, 
+
+        self.state = {
+            'throttle': 0, 
+            'steering': 0,  
+            'cruise_throttle': 0,
+            'control_flags': { # add more flags if needed
+                'safe': True,
+                'reverse': False, 
+                'light': False, 
+                'cruise': False, 
+            }
         }
 
-        self.control_strategies = {  # add more strategies if needed
-            'safe': WheelSafeFlagStrategy(), 
-            'reverse': WheelReverseFlagStrategy(), 
-            'light': WheelLightFlagStrategy(), 
-            'cruise': WheelCruiseFlagStrategy(), 
-        }
-
-        self.sensor_flags = {
-            'csi_camera': True, 
-            'rgbd_camera': False, 
-            'lidar': False
-        }
-
-        self.sensor_strategies = {  # add more strategies if needed
-
-        }
+        self.control_strategies = [ # add more strategies if needed
+            WheelSafeFlagStrategy(), 
+            WheelReverseFlagStrategy(), 
+            WheelLightFlagStrategy(), 
+            WheelCruiseFlagStrategy(),
+        ]  
 
     def terminate(self) -> None:
         self.done = True 
@@ -88,22 +81,18 @@ class WheelController(ServiceModule, Controller):
                 throttle = self.normalize_throttle(state_engines.contents.lX) 
                 steering = self.normalize_steering(state_engines.contents.lY)
 
-                for strategy in self.control_strategies.values: 
-                    strategy.execute(self.controller, self.control_flags) 
-                # data = self.state_to_dict(state_engines) # convert DIJOYSTATE2ENGINES object to python dict object 
+                self.state['throttle'] = throttle 
+                self.state['steering'] = steering 
 
-                state = {
-                    'throttle': throttle, 
-                    'steering': steering,  
-                    'cruise_throttle': self.control_strategies['cruise'].cruise_throttle,  
-                    'control_flags': self.control_flags, 
-                }
-                
+                for strategy in self.control_strategies: 
+                    strategy.execute(self.controller, self.state) 
+                # print(self.state) 
+
                 time.sleep(0.01)
 
                 queue_lock.acquire()
-                handle_full_queue(remote_queue, state)
-                handle_full_queue(local_queue, state)
+                handle_full_queue(remote_queue, self.state)
+                handle_full_queue(local_queue, self.state)
                 queue_lock.release()
  
 

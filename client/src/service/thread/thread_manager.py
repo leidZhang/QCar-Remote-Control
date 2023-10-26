@@ -1,5 +1,6 @@
 import os 
 import sys 
+import time 
 import queue
 import threading 
 
@@ -10,27 +11,43 @@ from strategies.thread_strategies import ControlSocketStrategy
 from strategies.thread_strategies import WheelControllerStrategy 
 from strategies.thread_strategies import VirtualControlStrategy 
 from strategies.thread_strategies import KeyboardControllerStrategy 
+from strategies.thread_strategies import VirtualCSICameraStrategy 
 
 class ThreadManager(ServiceModule): 
     def __init__(self) -> None:  
-        self.init_strategies = None 
-        self.threads = [] 
         self.queues = { # add more queues if needed 
             'remote': queue.Queue(10), 
             'local': queue.Queue(10), 
             'response': queue.Queue(10), 
+            'camera': queue.Queue(10), 
         }
         self.locks = { # add more locks if needed 
             'control': threading.Lock()
         }
 
-    def terminate(self) -> None:
-        for thread in self.init_strategies: 
-            thread.terminate() 
-            thread.join() 
+        self.threads = [] 
+        self.init_strategies = None 
+        self.sensor_strategies = [
+            VirtualCSICameraStrategy(args=(self.queues['camera'], )),
+        ] 
 
+    def terminate(self) -> None:
+        for strategy in self.init_strategies: 
+            if strategy is not None: 
+                strategy.target.terminate() 
+        
+        for thread in self.threads: 
+            thread.join() 
+         
     def is_valid(self) -> bool:
         pass 
+
+    def activate_sensors(self) -> None: 
+        for strategy in self.sensor_strategies: 
+            thread = strategy.register() 
+            if thread != None: 
+                thread.start() 
+                self.threads.append(thread)
     
     def run(self) -> None:
         init_ui = InitUI() 
@@ -50,20 +67,23 @@ class ThreadManager(ServiceModule):
                 index=settings['device'], 
                 args=(self.locks['control'], self.queues['remote'], self.queues['local'])
             ), 
-            VirtualControlStrategy(
-                start_node=settings['spawn_point'],  
-                args=(self.queues['local'], )
-            ), 
             KeyboardControllerStrategy(
                 mode=settings['controller'],
                 args=(self.locks['control'], self.queues['remote'], self.queues['local'])
-            )
+            ), 
+            VirtualControlStrategy(
+                start_node=settings['spawn_point'],  
+                args=(self.locks['control'], self.queues['local'], self.queues['camera'], self)
+            ),  
         ]
 
-        for strategie in self.init_strategies: 
-            thread = strategie.register()
+        for i in range(len(self.init_strategies)): 
+            thread = self.init_strategies[i].register()
             if thread != None: 
-                self.threads.append(thread)        
+                self.threads.append(thread) 
+            else: 
+                self.init_strategies[i] = None 
+                   
         for thread in self.threads:  
             thread.start() 
         

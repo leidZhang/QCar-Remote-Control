@@ -10,32 +10,37 @@ from lib_qcar import QCarTask
 from lib_utilities import GPS, Controllers, Camera2D, LaneDetector, RoadMap, QLabsWorkspace, Other
 # custom scripts 
 sys.path.append('src/') 
+from common.utils import handle_full_queue
 from service.service_module import ServiceModule 
 from strategies.virtual_control_strategies import VirtualReverseStrategy
 from strategies.virtual_control_strategies import VirtualSafeStrategy 
 from strategies.virtual_control_strategies import VirtualCruiseStrategy 
 from strategies.virtual_control_strategies import VirtualLightStrategy 
+sys.path.append('src/service/') 
+from virtual_environment.virtual_csi_camera import VirtualCSICamera 
 
 class VirtualControl(ServiceModule): 
     def __init__(self, start_node) -> None:
         self.rate = 50 # placeholder rate 
         self.done = False 
-        self.LEDs = np.array([0, 0, 0, 0, 0, 0, 0, 0])
+        # initial setting attributes 
         self.my_car = None # QCarTask(frequency=int(self.rate), hardware=0)
         self.qlabs_workspace = None 
         self.road_map = None 
-        self.state = None 
         self.start_node = start_node 
         self.end_node = 18 if self.start_node != "18" else 17 # place holder attribute setting 
-
+        # QCar state attributes 
+        self.state = None
+        self.LEDs = np.array([0, 0, 0, 0, 0, 0, 0, 0])         
+        # QCar control strategies 
         self.virtual_qcar_strategies = [
             VirtualCruiseStrategy(), 
             VirtualReverseStrategy(), 
             VirtualSafeStrategy(), 
             VirtualLightStrategy(),
-        ]
+        ] 
             
-    def init_virtual_environment(self): 
+    def init(self): 
         self.start_node = int(self.start_node) 
         desired_nodes = [self.start_node, self.end_node] # [start_node, end_node] 
 
@@ -54,6 +59,7 @@ class VirtualControl(ServiceModule):
         file_path = os.path.abspath(relative_path) 
         os.startfile(file_path)
         time.sleep(2)
+        self.my_car = QCarTask(frequency=int(self.rate), hardware=0)
         print("QCar spawned!")
 
     def handle_LEDs(self) -> None: 
@@ -75,12 +81,12 @@ class VirtualControl(ServiceModule):
             return False 
         return True 
     
-    def run(self, local_queue) -> None:
+    def run(self, queue_lock, local_queue, camera_queue, thread_manager) -> None:
         print("activating virtual environment control...") 
-        
+         
         try: 
-            self.init_virtual_environment() 
-            self.my_car = QCarTask(frequency=int(self.rate), hardware=0) 
+            self.init() # init virtual control 
+            thread_manager.activate_sensors() 
 
             while not self.done: 
                 if not local_queue.empty(): 
@@ -90,16 +96,22 @@ class VirtualControl(ServiceModule):
                     for strategy in self.virtual_qcar_strategies: 
                         strategy.execute(self) 
                     # handle control
-                    throttle = 0.75 * self.state['throttle'] # config here 
+                    throttle = 0.75 * 0.05 * self.state['throttle'] # config here 
                     steering = 0.5 * self.state['steering']
 
-                    os.system("cls") 
-                    print("throttle:", throttle, "steering:", steering)
+                    # os.system("cls") 
+                    # print("throttle:", throttle, "steering:", steering)
 
                     # handle LEDs 
                     self.handle_LEDs() 
 
-                    self.my_car.read_write_std(np.array([throttle, steering]), self.LEDs) 
+                    # apply state to qcar 
+                    self.my_car.read_write_std(np.array([throttle, steering]), self.LEDs)  
+                    # transmit steering to sensor 
+                    queue_lock.acquire()
+                    handle_full_queue(camera_queue, steering)
+                    queue_lock.release()
+
         except Exception as e: 
             print(e) 
         finally: 

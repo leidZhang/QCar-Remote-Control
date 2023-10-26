@@ -45,7 +45,15 @@ class KeyboardController(ServiceModule, Controller):
     
     def terminate(self) -> None:
         self.done = True 
-        os._exit(0)         
+        os._exit(0)  
+
+    def to_zero(self, val) -> int: 
+        if val > 0: 
+            return val - 1 
+        elif val < 0: 
+            return val + 1 
+        else: 
+            return 0 
 
     def normalize_steering(self, y_axis_signal) -> float:
         return y_axis_signal / 5000 
@@ -54,19 +62,19 @@ class KeyboardController(ServiceModule, Controller):
         return x_axis_signal / 3000 
 
     def run(self, queue_lock, remote_queue, local_queue) -> None:  
+        print('activating keyboard controller') 
+
         for strategy in self.control_strategies: 
             keyboard.on_press_key(strategy.key, strategy.execute)
 
         throttle, steering = 0, 0 
-        while not self.done: 
+        while not self.done:  
             if keyboard.is_pressed('w'): 
                 throttle += 2 
                 if throttle > 3000: 
                     throttle = 3000  
             else: 
-                throttle -= 2 
-                if throttle <= 0: 
-                    throttle = 0 
+                throttle = self.to_zero(throttle)  
 
             if keyboard.is_pressed('a'): 
                 steering += 1 
@@ -76,13 +84,17 @@ class KeyboardController(ServiceModule, Controller):
                 steering -= 1 
                 if steering < -5000: 
                     steering = -5000
+            else: 
+                steering = self.to_zero(steering) 
 
             if keyboard.is_pressed('`'): 
                 self.terminate() 
 
             self.state['throttle'] = self.normalize_throttle(throttle)
             self.state['steering'] = self.normalize_steering(steering) 
-
+            # print('steering', self.state['steering'])
+            # print('throttle', self.state['throttle'])
+            
             queue_lock.acquire()
             handle_full_queue(remote_queue, self.state)
             handle_full_queue(local_queue, self.state)

@@ -7,6 +7,7 @@ from service.socket.control_socket import ControlSocket
 from service.virtual_environment.virtual_control import VirtualControl 
 from service.controller.impl.wheel_controller import WheelController 
 from service.controller.impl.keyboard_controller import KeyboardController
+from service.virtual_environment.virtual_csi_camera import VirtualCSICamera 
 
 class ThreadStrategy(ABC): 
     @abstractmethod 
@@ -47,4 +48,10 @@ class VirtualControlStrategy(ThreadStrategy):
     def __init__(self, start_node, args) -> None:
         self.name = "Virtual-Control" 
         self.target = VirtualControl(start_node) 
+        self.args = args 
+
+class VirtualCSICameraStrategy(ThreadStrategy): 
+    def __init__(self, args) -> None:
+        self.name = "Virtual-Front-CSI" 
+        self.target = VirtualCSICamera() 
         self.args = args 

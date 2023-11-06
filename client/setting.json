@@ -1,0 +1,1 @@
+{"operation_mode": "local", "ip": "", "port": "", "spawn_node": "9", "destination_node": "50", "controller": "keyboard", "video": "qlab", "device": "0", "traffic": "right", "csi_camera": 1, "rgbd_camera": 0, "lidar": 0}

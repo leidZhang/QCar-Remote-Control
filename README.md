@@ -54,6 +54,7 @@ python3 main.py
 2. The spawn point 19 is not available
 3. Virtual LiDAR is not available for now
 4. A dedicated graphics card with at least Nvidia GTX660 is recommended to enjoy the project as intended.
+5. Gamepad module is not implemented yet 
 
 ## Usage 
 You can choose to only control QCar in the virtual environment or control the QCar in both virtual environment and the real world. 

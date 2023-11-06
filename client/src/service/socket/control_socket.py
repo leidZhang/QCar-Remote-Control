@@ -3,7 +3,7 @@ import pickle
 from socket import * 
 
 sys.path.append('src/') 
-from service.service_module import ServiceModule
+from common.service_module import ServiceModule
 from common.utils import handle_full_queue  
 
 class ControlSocket(ServiceModule): 

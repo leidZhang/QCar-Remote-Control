@@ -4,7 +4,7 @@ import queue
 import threading 
 
 sys.path.append('src/')
-from service.service_module import ServiceModule
+from common.service_module import ServiceModule
 from strategies.thread_strategies import QCarControlStrategy
 from strategies.thread_strategies import ControlSocketStrategy 
 
@@ -32,6 +32,7 @@ class ThreadManager(ServiceModule):
         # terminate modules and thread join 
         for thread in self.threads: 
             thread.terminate() 
+        for thread in self.threads: 
             thread.join() 
         # exit the program  
         os._exit(0)  

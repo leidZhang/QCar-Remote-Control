@@ -7,7 +7,7 @@ import os
 import cv2
 import math 
 
-sys.path.append('../common/')
+sys.path.append('dependencies/q_libs')
 from numpy.core.numeric import zeros_like
 from lib_qcar import QCarTask
 from lib_utilities import GPS, Controllers, Camera2D, LaneDetector, RoadMap, QLabsWorkspace
@@ -18,15 +18,15 @@ saturate = Other.saturate
 # User Interface... 
 # style = input('Are you driving on the (left) side or the (right)? :')
 style = 'right' 
-if style=='right':
-    print('Selected right-sided driving...')
-    node_map = cv2.imread('../images/Nodes_Right.png')
-else:
-    print('Selected left-sided driving...')
-    node_map = cv2.imread('../images/Nodes_Left.png')
-cv2.imshow('Roadmap: Pick a starting node and ending node index (map is not clickable)', node_map)  #  Generate GUI 
-print('press any key to continue') 
-cv2.waitKey(0)  # press enter on the GUI 
+# if style=='right':
+#     print('Selected right-sided driving...')
+#     node_map = cv2.imread('../images/Nodes_Right.png')
+# else:
+#     print('Selected left-sided driving...')
+#     node_map = cv2.imread('../images/Nodes_Left.png')
+# cv2.imshow('Roadmap: Pick a starting node and ending node index (map is not clickable)', node_map)  #  Generate GUI 
+# print('press any key to continue') 
+# cv2.waitKey(0)  # press enter on the GUI 
 # stringCmd = input('Provide waypoints you wish to navigate, seperated by commas "," :')
 # desiredNodes = stringCmd.split(',')  # command array [start, end]
 # desiredNodes = [int(x) for x in desiredNodes]  # convert string to int 
@@ -57,10 +57,9 @@ qlabsWorkspace.spawnRoadPoints()
 # -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 #region: Spawn Models
 # Launch the spawn models for a joystick and QCar
-relative_path = "../rt-win64/QCar_Workspace_5.rt-win64" 
-file_path = os.path.abspath(relative_path)
+relative_path = "dependencies/rt-win64/QCar_Workspace_5.rt-win64" 
+file_path = os.path.abspath(relative_path) 
 os.startfile(file_path)
-# os.startfile("QCar_Workspace_5.rt-win64")   # this has 100 Hz IO & 5 Hz non-blocking GPS
 time.sleep(2)
 # os.startfile("joystick.rt-win64")
 
@@ -150,6 +149,7 @@ try:
 
     # while elapsed_time() < simulationTime:
     while True:
+        t1 = time.time()
         # Start timing this iteration
         start = elapsed_time()
         delta = start - prev # delta = true timestep
@@ -176,7 +176,7 @@ try:
         # If delta is zero, you never iterated, so skip the iteration manually
         if delta == 0.0:
             continue        
-
+        t2 = time.time()
         # check if you are close enough to the next waypoint, and if so, increment
         # print(x_est, myCar.wheel_track, theta_est)
         front_x = x_est + myCar.wheel_track * math.cos(theta_est)
@@ -212,14 +212,14 @@ try:
         if throttle < 0:
             LEDs[5] = 1
     
-        status = myCar.read_write_std(np.array([0, 0]), LEDs)     
+        status = myCar.read_write_std(np.array([0.05, 0]), LEDs)     
         mtr_encoder = status[2] 
         
         # estimate vehicle speed, and then fuse with GPS data using complementary filters
         speed = myCar.estimate_speed(mtr_encoder, steering)
         forward_speed = speed[0]
         angular_speed = speed[1]
-        print("dir: ", steering, "spd: ", forward_speed)
+        # print("dir: ", steering, "spd: ", forward_speed)
         # GPS data is incoming at 100 Hz only (every 5 samples at 500Hz)
         # if counter % 10 == 0: 
         flag = gps.read()
@@ -236,11 +236,17 @@ try:
             y_est = comp_filter_y.send((y_est, forward_speed * math.sin(theta_est)))
         end = elapsed_time()
         prev = start
+        if counter % 3 == 0:
+            t3 = time.time()
+            print('time', t2-t1, t3-t1)
+            print('-----------')
         counter = counter + 1
+
         
+   
 # except KeyboardInterrupt:
 #     print("User interrupted!")
-
+    
 except Exception as e: 
     print(e) 
 

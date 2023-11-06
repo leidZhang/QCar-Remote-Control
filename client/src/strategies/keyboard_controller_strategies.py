@@ -9,11 +9,6 @@ class KeyboardControllerStrategy(ABC):
     def execute(self, keyboard_event) -> None: 
         pass 
 
-class KeyboardBrakeStrategy(KeyboardControllerStrategy): 
-    def execute(self, keyboard_event) -> None:
-        if keyboard_event.event_type == 'down': 
-            self.controller.state['throttle'] = 0 
-
 class KeyboardReverseFlagStrategy(KeyboardControllerStrategy): 
     def execute(self, keyboard_event) -> None:
         if keyboard_event.event_type == 'down': 

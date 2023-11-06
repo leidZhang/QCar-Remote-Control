@@ -2,7 +2,7 @@ import os
 import sys
 import time  
 
-sys.path.append('C:/Users/zphwi/OneDrive/Desktop/HaoZhang/QCarControl/client/dependencies/quanser/')
+sys.path.append('C:/Users/zphwi/OneDrive/Desktop/HaoZhang/QCarControl/client/dependencies/q_libs/')
 from numpy.core.numeric import zeros_like 
 from lib_qcar import QCarTask
 from lib_utilities import GPS, Controllers, Camera2D, LaneDetector, RoadMap, QLabsWorkspace, Other

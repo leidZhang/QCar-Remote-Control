@@ -7,7 +7,7 @@ from Quanser.product_QCar import QCar
 from Quanser.q_misc import Calculus
 from Quanser.q_interpretation import basic_speed_estimation
 sys.path.append('src/') 
-from service.service_module import ServiceModule
+from common.service_module import ServiceModule
 from common.utils import handle_full_queue
 from common.utils import status_to_dict 
 from strategies.qcar_control_strategies import LightStrategy 

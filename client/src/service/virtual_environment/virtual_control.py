@@ -6,47 +6,42 @@ import queue
 # quanser packages 
 sys.path.append('dependencies/q_libs') # start from project root 
 from numpy.core.numeric import zeros_like 
-from lib_qcar import QCarTask
-from lib_utilities import GPS, Controllers, Camera2D, LaneDetector, RoadMap, QLabsWorkspace, Other
+from lib_qcar import QCar
+from lib_utilities import RoadMap, QLabsWorkspace
 # custom scripts 
 sys.path.append('src/') 
-from common.utils import handle_full_queue
-from service.service_module import ServiceModule 
+from common.service_module import ServiceModule 
 from strategies.virtual_control_strategies import VirtualReverseStrategy
 from strategies.virtual_control_strategies import VirtualSafeStrategy 
 from strategies.virtual_control_strategies import VirtualCruiseStrategy 
 from strategies.virtual_control_strategies import VirtualLightStrategy 
-sys.path.append('src/service/') 
-from virtual_environment.virtual_csi_camera import VirtualCSICamera 
 
 class VirtualControl(ServiceModule): 
-    def __init__(self, start_node) -> None:
+    def __init__(self, traffic, start_node, end_node) -> None:
+        self.style = traffic
+        self.status = False 
         self.rate = 50 # placeholder rate 
         self.done = False 
-        # initial setting attributes 
+        self.LEDs = np.array([0, 0, 0, 0, 0, 0, 0, 0])
         self.my_car = None # QCarTask(frequency=int(self.rate), hardware=0)
         self.qlabs_workspace = None 
         self.road_map = None 
-        self.start_node = start_node 
-        self.end_node = 18 if self.start_node != "18" else 17 # place holder attribute setting 
-        # QCar state attributes 
-        self.state = None
-        self.LEDs = np.array([0, 0, 0, 0, 0, 0, 0, 0])         
-        # QCar control strategies 
+        self.state = None 
+        self.start_node = int(start_node) 
+        self.end_node = int(end_node) # place holder attribute setting 
+
         self.virtual_qcar_strategies = [
             VirtualCruiseStrategy(), 
             VirtualReverseStrategy(), 
             VirtualSafeStrategy(), 
             VirtualLightStrategy(),
-        ] 
+        ]
             
-    def init(self): 
-        self.start_node = int(self.start_node) 
+    def init_virtual_environment(self): 
         desired_nodes = [self.start_node, self.end_node] # [start_node, end_node] 
 
-        style = 'right' 
         # generate pathway to get the correct direction 
-        self.road_map = RoadMap(style) 
+        self.road_map = RoadMap(self.style) 
         closed_circuit = self.road_map.generate_waypoints(desired_nodes, factor = 10)
         pathway = self.road_map.pathway
         waypoint_list = self.road_map.waypoint_list
@@ -59,7 +54,6 @@ class VirtualControl(ServiceModule):
         file_path = os.path.abspath(relative_path) 
         os.startfile(file_path)
         time.sleep(2)
-        self.my_car = QCarTask(frequency=int(self.rate), hardware=0)
         print("QCar spawned!")
 
     def handle_LEDs(self) -> None: 
@@ -77,16 +71,17 @@ class VirtualControl(ServiceModule):
         print("Virtual Control terminated") 
 
     def is_valid(self) -> bool:
-        if self.start_node is None: 
+        if self.start_node is None or self.end_node is None: 
             return False 
         return True 
     
-    def run(self, queue_lock, local_queue, camera_queue, thread_manager) -> None:
+    def run(self, local_queue) -> None:
         print("activating virtual environment control...") 
-         
+        
         try: 
-            self.init() # init virtual control 
-            thread_manager.activate_sensors() 
+            self.init_virtual_environment() 
+            self.my_car = QCar(hardware=0) 
+            self.status = True 
 
             while not self.done: 
                 if not local_queue.empty(): 
@@ -96,22 +91,15 @@ class VirtualControl(ServiceModule):
                     for strategy in self.virtual_qcar_strategies: 
                         strategy.execute(self) 
                     # handle control
-                    throttle = 0.75 * 0.05 * self.state['throttle'] # config here 
+                    throttle = 0.3 * 0.15 * self.state['throttle'] # config here 
                     steering = 0.5 * self.state['steering']
-
-                    # os.system("cls") 
-                    # print("throttle:", throttle, "steering:", steering)
-
                     # handle LEDs 
                     self.handle_LEDs() 
 
-                    # apply state to qcar 
-                    self.my_car.read_write_std(np.array([throttle, steering]), self.LEDs)  
-                    # transmit steering to sensor 
-                    queue_lock.acquire()
-                    handle_full_queue(camera_queue, steering)
-                    queue_lock.release()
+                    self.my_car.read_write_std(np.array([throttle, steering]), self.LEDs) 
 
+                    os.system("cls") 
+                    print(self.state) 
         except Exception as e: 
             print(e) 
         finally: 

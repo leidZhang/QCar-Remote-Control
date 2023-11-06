@@ -770,7 +770,8 @@ class Lidar():
 		self.lidar = RPLIDAR()
 		# self.maxDistance = 18.0
 		try:
-			self.lidar.open("serial-cpu://localhost:2?baud='115200',word='8',parity='none',stop='1',flow='none',dsr='on'", RangingDistance.LONG)
+			# self.lidar.open("serial-cpu://localhost:2?baud='115200',word='8',parity='none',stop='1',flow='none',dsr='on'", RangingDistance.LONG)
+			self.lidar.open("tcpip://localhost:18966", RangingDistance.LONG)
 		except DeviceError as de:
 			if de.error_code == -34:
 				pass
@@ -787,6 +788,7 @@ class Lidar():
 				print(de.get_error_message())
 
 	def read(self):
+
 		try:
 			self.lidar.read(RangingMeasurementMode.NORMAL, 0, 0, self.measurements)
 			self.distances = np.array(self.measurements.distance)
@@ -796,11 +798,20 @@ class Lidar():
 			# self.distances[self.distances > self.maxDistance] = 0
 			self.angles = np.array(self.measurements.heading)
 			
+			
 		except DeviceError as de:
 			if de.error_code == -34:
 				pass
 			else:
 				print(de.get_error_message())
+
+		# self.lidar.read(RangingMeasurementMode.NORMAL, 0, 0, self.measurements)
+		# self.distances = np.array(self.measurements.distance)
+		# # self.distances = np.append(  np.flip( self.distances[0:int(self.num_measurements/4)] ) , 
+		# #                              np.flip( self.distances[int(self.num_measurements/4):]) )
+		# # self.distances[self.distances > self.maxDistance] = self.maxDistance
+		# # self.distances[self.distances > self.maxDistance] = 0
+		# self.angles = np.array(self.measurements.heading)
 
 class LaneDetector():
 	# This example is derived from the repository ["Tutorial: Build a lane detector"](https://towardsdatascience.com/tutorial-build-a-lane-detector-679fd8953132) published on Medium.

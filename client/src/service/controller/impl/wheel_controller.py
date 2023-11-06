@@ -9,7 +9,7 @@ from common.constants import WHEEL_CONTROLLER_STEERING_MIN
 from common.constants import WHEEL_CONTROLLER_ACCELERATOR_MID
 from common.constants import WHEEL_CONTROLLER_ACCELERATOR_MAX 
 from service.controller.controller import Controller  
-from service.service_module import ServiceModule  # abstract class 
+from common.service_module import ServiceModule  # abstract class 
 from strategies.wheel_controller_strategies import WheelReverseFlagStrategy 
 from strategies.wheel_controller_strategies import WheelLightFlagStrategy 
 from strategies.wheel_controller_strategies import WheelSafeFlagStrategy 

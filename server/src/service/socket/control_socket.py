@@ -3,7 +3,7 @@ import pickle
 from socket import *
 
 sys.path.append('src/')
-from service.service_module import ServiceModule
+from common.service_module import ServiceModule
 from common.utils import handle_full_queue
 
 
@@ -34,6 +34,7 @@ class ControlSocket(ServiceModule):
                 try: 
                     data = connection_socket.recv(1024)                  
                     received_data = pickle.loads(data)
+                    print(received_data)
                     
                     handle_full_queue(data_queue, received_data) 
                     response_data = response_queue.get()

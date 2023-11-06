@@ -14,6 +14,13 @@ class OperationModeSection(UIComponent):
         else: 
             self.values['ip'].config(state='normal') 
             self.values['port'].config(state='normal')
+        
+        if value == "remote": 
+            self.values['spawn_node'].config(state='disabled') 
+            self.values['destination_node'].config(state='disabled') 
+        else: 
+            self.values['spawn_node'].config(state='normal') 
+            self.values['destination_node'].config(state='normal') 
 
     def create_widgets(self) -> None:
         operation_mode_label = tk.Label(self.root, text="Operation Mode", font=("Arial", 14)) 

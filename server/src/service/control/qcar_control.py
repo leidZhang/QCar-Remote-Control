@@ -77,7 +77,7 @@ class QCarControl(ServiceModule):
                         strategy.execute(self) 
 
                     # handle control 
-                    throttle = 0.3 * self.state['throttle'] 
+                    throttle = 0.3 * 0.15 * self.state['throttle'] 
                     steering = 0.5 * self.state['steering'] 
                     self.motor_command = np.array([throttle, steering]) 
                     # handle LEDs 

@@ -1,6 +1,6 @@
 # QCarSteeringControl 
 ## Introduction 
-This Python-based project designed to enable remote control of a Quanser QCar using a Logitech steering wheel controller. The QCar operates as a server, processing data sent from the client, while a windows workstation act as the client, transmitting input from the Logitech steering wheel controller and displaying response from the QCar. 
+This Python-based project designed to enable remote control of a Quanser QCar or/and control Virtual QCar in the QLab. The QCar operates as a server, processing data sent from the client, while a windows workstation act as the client, transmitting input from the controller and displaying response from the QCar. 
 
 This project not only encompasses fundamental functionalities but has also successfully implemented advanced features such as cruise control, reverse functionality, and the ability to toggle the QCar's light on and off. 
 
@@ -52,6 +52,9 @@ python3 main.py
 ### Note 
 1. Sometimes the device connected to the workstation is identified as device 1, make sure the correct device is being listened.
 2. The spawn point 19 is not available
+3. Virtual LiDAR is not available for now
+4. A dedicated graphics card with at least Nvidia GTX660 is recommended to enjoy the project as intended.
+5. Gamepad module is not implemented yet 
 
 ## Usage 
 You can choose to only control QCar in the virtual environment or control the QCar in both virtual environment and the real world. 
@@ -87,8 +90,9 @@ For Logitech steering wheel controller
 - <b>2023-09-26:</b> Refactored code to satisfy SOLID principle
 - <b>2023-10-11:</b> Initial setting GUI
 - <b>2023-10-13:</b> Keyboard control
+- <b>2023-10-30:</b> sensors on virtual QCar 
 ## Future Work 
-Implement video data streaming from the QCar to the workstation.
+Implement video data streaming from the physical QCar to the workstation.
 
 ## License
 This project is licensed under the Apache-2.0 license - see the LICENSE file for details.

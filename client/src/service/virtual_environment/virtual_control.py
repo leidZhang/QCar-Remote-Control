@@ -27,8 +27,8 @@ class VirtualControl(ServiceModule):
         self.qlabs_workspace = None 
         self.road_map = None 
         self.state = None 
-        self.start_node = int(start_node) 
-        self.end_node = int(end_node) # place holder attribute setting 
+        self.start_node = start_node
+        self.end_node = end_node # place holder attribute setting 
 
         self.virtual_qcar_strategies = [
             VirtualCruiseStrategy(), 
@@ -38,7 +38,9 @@ class VirtualControl(ServiceModule):
         ]
             
     def init_virtual_environment(self): 
-        desired_nodes = [self.start_node, self.end_node] # [start_node, end_node] 
+        start_node = int(self.start_node) 
+        end_node = int(self.end_node)
+        desired_nodes = [start_node, end_node] # [start_node, end_node] 
 
         # generate pathway to get the correct direction 
         self.road_map = RoadMap(self.style) 
@@ -71,7 +73,7 @@ class VirtualControl(ServiceModule):
         print("Virtual Control terminated") 
 
     def is_valid(self) -> bool:
-        if self.start_node is None or self.end_node is None: 
+        if self.start_node != "" or self.end_node != "": 
             return False 
         return True 
     

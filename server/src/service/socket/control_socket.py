@@ -19,6 +19,7 @@ class ControlSocket(ServiceModule):
         print("Stopping socket...")
         self.done = True 
         self.server_socket.close() 
+        print("control socket closed")
     
     def run(self, data_queue, response_queue) -> None: 
         self.server_socket.bind((self.host_name, self.port))

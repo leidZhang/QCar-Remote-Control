@@ -2,7 +2,7 @@ import sys
 import time
 import numpy as np 
 
-sys.path.append('dependencies/')
+sys.path.append('../dependencies/')
 from Quanser.product_QCar import QCar
 from Quanser.q_misc import Calculus
 from Quanser.q_interpretation import basic_speed_estimation
@@ -22,6 +22,7 @@ class QCarControl(ServiceModule):
         self.sample_rate = 50
         self.sample_time = 1 / self.sample_rate 
         self.state = None 
+        self.done = False
 
         self.motor_command = np.array([0.0, 0.0]) 
         self.LEDs = np.array([0, 0, 0, 0, 0, 0, 0, 0])
@@ -36,6 +37,7 @@ class QCarControl(ServiceModule):
         print("Stopping QCar...")
         self.done = True 
         self.my_car.terminate() 
+        print("QCar stopped")
     
     def handle_LEDs(self) -> None:                      
         # Adjust LED indicators based on steering        
@@ -84,7 +86,7 @@ class QCarControl(ServiceModule):
                     self.handle_LEDs()
 
                     # Perform I/O
-                    current, battery_voltage, encoder_counts = self.myCar.read_write_std(self.motor_command, self.LEDs)
+                    current, battery_voltage, encoder_counts = self.my_car.read_write_std(self.motor_command, self.LEDs)
                     
                     # Differentiate encoder counts and then estimate linear speed in m/s
                     encoder_speed = diff.send((encoder_counts, time_step))
@@ -104,7 +106,8 @@ class QCarControl(ServiceModule):
                     response_data = status_to_dict(linear_speed, battery_capacity, self.motor_command[0], self.motor_command[1]) 
                     handle_full_queue(response_queue, response_data)
 
-                    queue_lock.release()
+                queue_lock.release()
+
                 time_after_sleep = self.elapsed_time()
                 time_step = time_after_sleep - start   
         except Exception as e: 
@@ -113,3 +116,4 @@ class QCarControl(ServiceModule):
             self.my_car.terminate()
             
             
+

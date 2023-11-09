@@ -31,12 +31,15 @@ class ControlSocket(ServiceModule):
                 queue_lock.acquire() 
 
                 try: 
+                    # print(control_queue.empty()) 
+
                     if not control_queue.empty(): 
                         data = control_queue.get() # get dict object
+                        print(data)
                         queue_lock.release() 
-                        self.clientSocket.sendall(pickle.dumps(data)) 
+                        self.socket.sendall(pickle.dumps(data)) 
 
-                        response = self.clientSocket.recv(1024)
+                        response = self.socket.recv(1024)
                         responseData = pickle.loads(response) 
                         handle_full_queue(response_queue, responseData) 
                     else: 

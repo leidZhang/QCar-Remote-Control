@@ -21,8 +21,8 @@ class ThreadManager(ServiceModule):
         }
 
         self.init_strategies = [
-            ControlSocketStrategy(), 
-            QCarControlStrategy(),  
+            ControlSocketStrategy(args=(self.queues['control_data_queue'], self.queues['control_response_queue'])), 
+            QCarControlStrategy(args=(self.locks['control_lock'], self.queues['control_data_queue'], self.queues['control_response_queue'])),  
         ]
 
         self.threads = [] 
@@ -30,8 +30,8 @@ class ThreadManager(ServiceModule):
     def terminate(self) -> None: 
         print("Stopping server...") 
         # terminate modules and thread join 
-        for thread in self.threads: 
-            thread.terminate() 
+        for strategy in self.init_strategies: 
+            strategy.target.terminate() 
         for thread in self.threads: 
             thread.join() 
         # exit the program  

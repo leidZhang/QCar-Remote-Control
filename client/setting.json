@@ -1,0 +1,1 @@
+{"operation_mode": "remote", "ip": "192.168.2.15", "port": "8080", "spawn_node": "", "destination_node": "", "controller": "wheel", "video": "qcar", "device": "0", "traffic": "right", "csi_camera": 0, "rgbd_camera": 0, "lidar": 0}

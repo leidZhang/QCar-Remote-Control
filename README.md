@@ -48,7 +48,7 @@ cd client
 cd src
 python3 main.py
 ```
-4a. Configure the settings using the GUI.
+4a. Configure the settings using the GUI. <br>
 4b. Execute the main components and control your QCar.
 
 ### Note 

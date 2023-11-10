@@ -48,16 +48,33 @@ cd client
 cd src
 python3 main.py
 ```
-4a. Configure the settings using the GUI. <br>
-4b. Execute the main components and control your QCar.
+4. Once the client side is running, you'll see the text like following prompt in the terminal:
+```
+The following is your initial setting: 
+csi_camera: False
+rgbd_camera: True
+lidar: False
+operation_mode: local
+controller: keyboard
+traffic: left
+video: qlab
+spawn_node: 9
+destination_node: 50
+port: 8080
+ip: 192.168.2.15
+device: 0
+Do you wish to use this setting? [y/n]
+```
+5. enter 'y' to enter the GUI to set up the system or enter 'n' to run the main component and start control
 
 ### Note 
 1. Sometimes the device connected to the workstation is identified as device 1, make sure the correct device is being listened.
-2. The spawn point 19 is not available
-3. Virtual LiDAR is not available for now
-4. A dedicated graphics card with at least Nvidia GTX660 is recommended to enjoy the project as intended.
-5. Gamepad module is not implemented yet
-6. Can only receive video stream from QLab for now
+2. After completing GUI setup, the system will stop.
+3. Spawn node 19 is not available.
+4. Virtual LiDAR is not available for now
+5. A dedicated graphics card with at least Nvidia GTX660 is recommended to enjoy the project as intended.
+6. Gamepad module is not implemented yet
+7. Video stream can only be received from QLab
 
 ## Usage 
 You can choose to only control QCar in the virtual environment or control the QCar in both virtual environment and the real world. 

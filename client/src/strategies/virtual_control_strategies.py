@@ -18,8 +18,10 @@ class VirtualReverseStrategy(VirtualControlStrategy):
     def execute(self, control) -> None:
         if control.state['control_flags']['reverse']: 
             control.state['throttle'] *= -1 
+            control.state['cruise_throttle'] *= -1
         else: 
             control.state['throttle'] *= 1
+            control.state['cruise_throttle'] *= 1
     
 class VirtualCruiseStrategy(VirtualControlStrategy): 
     def execute(self, control) -> None:

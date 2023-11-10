@@ -30,6 +30,12 @@ class ServiceManager(ServiceModule):
         }
         
         self.init_strategies = { # add more strategies here if needed 
+            'control_socket': ControlSocketStrategy(
+                mode=settings['operation_mode'],
+                ip=settings['ip'], 
+                port=settings['port'], 
+                args=(self.locks['control'], self.queues['remote'], self.queues['response'])
+            ), 
             'wheel_controller': WheelControllerStrategy(
                 mode=settings['controller'],
                 index=settings['device'], 
@@ -39,12 +45,8 @@ class ServiceManager(ServiceModule):
                 mode=settings['controller'],
                 args=(self.locks['control'], self.queues['remote'], self.queues['local'])
             ), 
-            'control_socket': ControlSocketStrategy(
-                ip=settings['ip'], 
-                port=settings['port'], 
-                args=(self.locks['control'], self.queues['remote'], self.queues['response'])
-            ), 
             'virtual_control': VirtualControlStrategy(
+                mode=settings['operation_mode'],
                 traffic=settings['traffic'], 
                 start_node=settings['spawn_node'],  
                 end_node=settings['destination_node'], 
@@ -67,15 +69,13 @@ class ServiceManager(ServiceModule):
         print('control threads stopped')
 
         for sensor in self.sensors.values(): 
-            if sensor is not None: 
-                sensor.target.terminate() 
+            sensor.terminate() 
         for process in self.processes: 
             process.join() 
         print('sensors stopped')
          
     def is_valid(self) -> bool:
-        virtual_control = self.init_strategies['virtual_control'].target
-        return virtual_control.status 
+        return True 
     
     def run(self) -> None:
         print("settings applied!")
@@ -90,7 +90,6 @@ class ServiceManager(ServiceModule):
             thread.start() 
 
         print("activated threads:", len(self.threads))
-
         if self.init_strategies['virtual_control'] is not None: 
             while not self.init_strategies['virtual_control'].target.status: 
                 time.sleep(5) # wait until virtual environment initialized 

@@ -25,7 +25,7 @@ class VirtualCSICamera(ServiceModule):
 
     def terminate(self) -> None: 
         self.done = True 
-        for i in range(len(self.cameras)): 
+        for i in range(4): 
             self.cameras[i].terminate() 
         print("CSI cameras terminated") 
 

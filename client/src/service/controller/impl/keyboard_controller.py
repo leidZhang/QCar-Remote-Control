@@ -96,15 +96,13 @@ class KeyboardController(ServiceModule, Controller):
             self.state['throttle'] = self.normalize_throttle(throttle)
             self.state['steering'] = self.normalize_steering(steering) 
             
-            os.system("cls") 
+            # os.system("cls") 
             # if last_state != self.state: 
             queue_lock.acquire()
             handle_full_queue(remote_queue, self.state)
             handle_full_queue(local_queue, self.state)
             queue_lock.release() 
-
-            print(self.state) 
-            print(remote_queue.qsize())
+            # print(self.state) 
             # last_state = copy_state(self.state)  
             
 if __name__ == "__main__": 

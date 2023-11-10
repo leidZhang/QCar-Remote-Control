@@ -7,7 +7,8 @@ from common.service_module import ServiceModule
 from common.utils import handle_full_queue  
 
 class ControlSocket(ServiceModule): 
-    def __init__(self, ip, port) -> None: 
+    def __init__(self, mode, ip, port) -> None: 
+        self.mode = mode 
         self.host_name = ip 
         self.port = port  
         self.done = False 
@@ -17,8 +18,12 @@ class ControlSocket(ServiceModule):
         self.done = True 
 
     def is_valid(self) -> bool:
+        if self.mode == "local": 
+            return False 
+
         if self.host_name is None or self.port is None: 
             return False 
+        
         return True 
     
     def run(self, queue_lock, control_queue, response_queue) -> None:
@@ -31,15 +36,12 @@ class ControlSocket(ServiceModule):
                 queue_lock.acquire() 
 
                 try: 
-                    # print(control_queue.empty()) 
-
                     if not control_queue.empty(): 
                         data = control_queue.get() # get dict object
-                        print(data)
                         queue_lock.release() 
-                        self.socket.sendall(pickle.dumps(data)) 
+                        self.clientSocket.sendall(pickle.dumps(data)) 
 
-                        response = self.socket.recv(1024)
+                        response = self.clientSocket.recv(1024)
                         responseData = pickle.loads(response) 
                         handle_full_queue(response_queue, responseData) 
                     else: 

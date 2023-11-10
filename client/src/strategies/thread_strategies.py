@@ -38,14 +38,14 @@ class WheelControllerStrategy(ThreadStrategy):
         self.args = args 
 
 class ControlSocketStrategy(ThreadStrategy): 
-    def __init__(self, ip, port, args) -> None: 
+    def __init__(self, mode, ip, port, args) -> None: 
         self.name = 'Control-Socket' 
-        self.target = ControlSocket(ip, port) 
+        self.target = ControlSocket(mode, ip, port) 
         self.args = args 
 
 class VirtualControlStrategy(ThreadStrategy): 
-    def __init__(self, traffic, start_node, end_node, args) -> None:
+    def __init__(self, mode, traffic, start_node, end_node, args) -> None:
         self.name = "Virtual-Control" 
-        self.target = VirtualControl(traffic, start_node, end_node) 
+        self.target = VirtualControl(mode, traffic, start_node, end_node) 
         self.args = args 
 

@@ -85,7 +85,7 @@ class WheelController(ServiceModule, Controller):
                 self.state['steering'] = steering 
 
                 for strategy in self.control_strategies: 
-                    strategy.execute(self.controller, self.state) 
+                    strategy.execute(self.controller, self.state, int(self.index)) 
                 # os.system("cls") 
                 # print(self.state) 
 

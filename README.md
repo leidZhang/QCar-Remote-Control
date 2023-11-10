@@ -65,7 +65,7 @@ ip: 192.168.2.15
 device: 0
 Do you wish to use this setting? [y/n]
 ```
-5. enter 'y' to enter the GUI to set up the system or enter 'n' to run the main component and start control
+5. enter 'n' to enter the GUI to set up the system or enter 'y' to run the main component and start control
 
 ### Note 
 1. Sometimes the device connected to the workstation is identified as device 1, make sure the correct device is being listened.

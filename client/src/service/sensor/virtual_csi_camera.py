@@ -44,7 +44,7 @@ class VirtualCSICamera(ServiceModule):
         self.cameras.append(camera) 
 
     def init_csi(self) -> None: 
-        for i in range(4): 
+        for i in range(len(self.cameras)): 
             self.init_camera(i) 
 
         print('CSI Camera Activated')        

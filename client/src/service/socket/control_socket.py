@@ -39,9 +39,9 @@ class ControlSocket(ServiceModule):
                     if not control_queue.empty(): 
                         data = control_queue.get() # get dict object
                         queue_lock.release() 
-                        self.clientSocket.sendall(pickle.dumps(data)) 
+                        self.socket.sendall(pickle.dumps(data)) 
 
-                        response = self.clientSocket.recv(1024)
+                        response = self.socket.recv(1024)
                         responseData = pickle.loads(response) 
                         handle_full_queue(response_queue, responseData) 
                     else: 
@@ -50,8 +50,8 @@ class ControlSocket(ServiceModule):
                         # Handle the case where the server closes the connection unexpectedly
                         print("Server connection reset. Reconnecting...")
                         self.terminate()  # Close the socket
-                        self.clientSocket = socket(AF_INET, SOCK_STREAM)
-                        self.clientSocket.connect((self.host_name, self.port))
+                        self.socket = socket(AF_INET, SOCK_STREAM)
+                        self.socket.connect((self.host_name, self.port))
         except Exception as e:
             print("An error occurred: {}".format(e))
             self.terminate()

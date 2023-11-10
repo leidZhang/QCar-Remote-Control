@@ -69,7 +69,8 @@ class ServiceManager(ServiceModule):
         print('control threads stopped')
 
         for sensor in self.sensors.values(): 
-            sensor.terminate() 
+            if sensor is not None: 
+                sensor.target.terminate() 
         for process in self.processes: 
             process.join() 
         print('sensors stopped')

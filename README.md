@@ -26,6 +26,7 @@ To install and run this project, you need to have some packages, QLab and Logite
 - keyboard: `pip install keyborad`
 - tkinter: `pip install tkinter`
 - logidrivepy: `pip install logidrivepy`
+- pywebview: `pip install pywebview`
 - Logitech G Hub: https://www.logitechg.com/en-ca/innovation/g-hub.html
 - quanser package and QLab are provided by Quanser
 
@@ -38,7 +39,8 @@ git clone https://github.com/leidZhang/QCarSteeringControl.git
 2. On your QCar, navigate to the project folder and use the following command to run the server:
 ```
 cd server
-./run.sh
+cd src
+sudo python3 main.py
 ```
 3. On your workstation, navigate to the project folder and use the following command to run the client:
 ```
@@ -46,15 +48,16 @@ cd client
 cd src
 python3 main.py
 ```
-4. Configure the settings using the GUI.
-5. Control your QCar.
+4a. Configure the settings using the GUI.
+4b. Execute the main components and control your QCar.
 
 ### Note 
 1. Sometimes the device connected to the workstation is identified as device 1, make sure the correct device is being listened.
 2. The spawn point 19 is not available
 3. Virtual LiDAR is not available for now
 4. A dedicated graphics card with at least Nvidia GTX660 is recommended to enjoy the project as intended.
-5. Gamepad module is not implemented yet 
+5. Gamepad module is not implemented yet
+6. Can only receive video stream from QLab for now
 
 ## Usage 
 You can choose to only control QCar in the virtual environment or control the QCar in both virtual environment and the real world. 
@@ -90,6 +93,7 @@ For Logitech steering wheel controller
 - <b>2023-09-26:</b> Refactored code to satisfy SOLID principle
 - <b>2023-10-11:</b> Initial setting GUI
 - <b>2023-10-13:</b> Keyboard control
+- <b>2023-11-10:</b> Get virtual QCar state readings 
 - <b>2023-10-30:</b> sensors on virtual QCar 
 ## Future Work 
 Implement video data streaming from the physical QCar to the workstation.

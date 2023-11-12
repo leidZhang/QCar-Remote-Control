@@ -110,8 +110,8 @@ For Logitech steering wheel controller
 - <b>2023-09-26:</b> Refactored code to satisfy SOLID principle
 - <b>2023-10-11:</b> Initial setting GUI
 - <b>2023-10-13:</b> Keyboard control
+- <b>2023-10-30:</b> sensors on virtual QCar
 - <b>2023-11-10:</b> Get virtual QCar state readings 
-- <b>2023-10-30:</b> sensors on virtual QCar 
 ## Future Work 
 Implement video data streaming from the physical QCar to the workstation.
 

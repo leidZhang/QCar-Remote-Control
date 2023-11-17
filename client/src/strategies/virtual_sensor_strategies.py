@@ -6,6 +6,7 @@ sys.path.append('src/')
 from service.sensor.virtual_csi_camera import VirtualCSICamera 
 from service.sensor.virtual_rgbd_camera import VirtualRGBDCamera 
 from service.sensor.virtual_lidar import VirtualLidar
+from service.sensor.virtual_gps import VirtualGPS 
 
 class VirtualSensorStrategy(ABC): 
     @abstractmethod 
@@ -38,3 +39,7 @@ class VirtualLidarStrategy(VirtualSensorStrategy):
         self.name = "Lidar" 
         self.target = VirtualLidar(mode) 
 
+class VirtualGPSStrategy(VirtualSensorStrategy): 
+    def __init__(self, mode) -> None:
+        self.name = "GPS" 
+        self.target = VirtualGPS(mode) 

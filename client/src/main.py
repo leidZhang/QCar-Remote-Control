@@ -35,6 +35,6 @@ if __name__ == "__main__":
     except KeyboardInterrupt: 
         done = True 
         service_manager.terminate()  
-    finally: 
-        print("System stopped") 
-        os._exit(0) # exit the program 
+    # finally: 
+    #     print("System stopped") 
+    #     os._exit(0) # exit the program 

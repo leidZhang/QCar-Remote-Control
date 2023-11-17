@@ -6,13 +6,17 @@ from multiprocessing import Process
 
 sys.path.append('src/') 
 from common.service_module import ServiceModule 
+# control thread strategies 
 from strategies.thread_strategies import ControlSocketStrategy 
 from strategies.thread_strategies import WheelControllerStrategy 
 from strategies.thread_strategies import VirtualControlStrategy 
+from strategies.thread_strategies import VirtualSpawnStrategy 
 from strategies.thread_strategies import KeyboardControllerStrategy 
+# sensor process strategies 
 from strategies.virtual_sensor_strategies import VirtualCSICameraStrategy
 from strategies.virtual_sensor_strategies import VirtualRGBDCameraStrategy
 from strategies.virtual_sensor_strategies import VirtualLidarStrategy 
+from strategies.virtual_sensor_strategies import VirtualGPSStrategy 
 
 class ServiceManager(ServiceModule): 
     def __init__(self, settings) -> None:  
@@ -45,11 +49,17 @@ class ServiceManager(ServiceModule):
                 mode=settings['controller'],
                 args=(self.locks['control'], self.queues['remote'], self.queues['local'])
             ), 
-            'virtual_control': VirtualControlStrategy(
+            'virtual_spawn': VirtualSpawnStrategy(
                 mode=settings['operation_mode'],
                 traffic=settings['traffic'], 
                 start_node=settings['spawn_node'],  
-                end_node=settings['destination_node'], 
+                end_node=settings['destination_node'],
+            ), 
+            'virtual_gps': VirtualGPSStrategy(
+                mode=settings['operation_mode']
+            ), 
+            'virtual_control': VirtualControlStrategy(
+                mode=settings['operation_mode'],
                 args=(self.queues['local'], )
             ),
         } 
@@ -58,6 +68,7 @@ class ServiceManager(ServiceModule):
             'csi_camera': VirtualCSICameraStrategy(settings['csi_camera']), 
             'rgbd_camera': VirtualRGBDCameraStrategy(settings['rgbd_camera']), 
             'lidar': VirtualLidarStrategy(settings['lidar']), 
+            'gps': VirtualGPSStrategy(settings['operation_mode']),
         }
 
     def terminate(self) -> None:
@@ -87,29 +98,25 @@ class ServiceManager(ServiceModule):
                 self.threads.append(thread) 
             else: 
                 self.init_strategies[key] = None 
+
+        virtual_spawn = self.init_strategies['virtual_spawn'].target
         for thread in self.threads:  
             thread.start() 
+            while thread.name == 'Virtual-Spawn' and not virtual_spawn.done: 
+                time.sleep(5) 
 
         print("activated threads:", len(self.threads))
-        if self.init_strategies['virtual_control'] is not None: 
-            while not self.init_strategies['virtual_control'].target.status: 
-                time.sleep(5) # wait until virtual environment initialized 
-            print("control threads have activated")
 
-            for key, strategy in self.sensors.items(): 
-                process = strategy.register() 
-                if process != None: 
-                    self.processes.append(process) 
-                else: 
-                    self.sensors[key] = None 
-            for process in self.processes: 
-                process.start() 
+        for key, strategy in self.sensors.items(): 
+            process = strategy.register() 
+            if process != None: 
+                self.processes.append(process) 
+            else: 
+                self.sensors[key] = None 
+        for process in self.processes: 
+            process.start() 
         
-            print('sensor processes have activated') 
-            pass 
-        else: 
-            # implement when stakeholders decide to read vedio stream from the real QCar 
-            pass 
+        print('sensor processes have activated') 
                  
 # if __name__ == "__main__": 
 #     t = ThreadManager() 

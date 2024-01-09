@@ -5,7 +5,7 @@ from logidrivepy import LogitechController
 from common.common_controller import Controller 
 from common.service_module import ServiceModule 
 from common.utils import handle_full_queue
-from core.init_settings import INIT_STATE
+from core.settings import INIT_STATE
 from common.constants import WHEEL_CONTROLLER_STEERING_MIN
 from common.constants import WHEEL_CONTROLLER_ACCELERATOR_MID
 from common.constants import WHEEL_CONTROLLER_ACCELERATOR_MAX 

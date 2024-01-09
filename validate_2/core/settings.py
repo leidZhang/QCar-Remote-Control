@@ -23,4 +23,4 @@ INIT_LOCKS = { # add more locks if needed
     'control': threading.Lock()
 }
 
-INIT_SETTINGS = None 
+INIT_SETTINGS = None # temp init setting, read from json 

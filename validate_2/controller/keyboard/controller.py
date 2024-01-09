@@ -4,7 +4,7 @@ import keyboard
 from common.service_module import ServiceModule  # abstract class
 from common.common_controller import Controller 
 from common.utils import handle_full_queue
-from core.init_settings import INIT_STATE
+from core.settings import INIT_STATE
 from strategies import KeyboardCruiseFlagStrategy 
 from strategies import KeyboardReverseFlagStrategy 
 from strategies import KeyboardLightFlagStrategy 

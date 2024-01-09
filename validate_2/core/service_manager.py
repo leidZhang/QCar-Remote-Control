@@ -5,8 +5,8 @@ import threading
 from multiprocessing import Process 
 
 from common.service_module import ServiceModule 
-from init_settings import INIT_QUEUES
-from init_settings import INIT_LOCKS
+from core.settings import INIT_QUEUES
+from core.settings import INIT_LOCKS
 # control thread strategies 
 from common.thread_strategies import ControlSocketStrategy 
 from common.thread_strategies import WheelControllerStrategy 

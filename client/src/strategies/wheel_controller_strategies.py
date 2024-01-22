@@ -13,35 +13,35 @@ class WheelControllerStrategy(ABC):
         self.last_press = time.time() 
 
     @abstractmethod
-    def execute(self, controller, state) -> None: 
+    def execute(self, controller, state, index) -> None: 
         pass 
 
 class WheelReverseFlagStrategy(WheelControllerStrategy): 
-    def execute(self, controller, state) -> None:
+    def execute(self, controller, state, index) -> None:
         current_time = time.time()
-        if controller.button_is_pressed(controller.index, BUTTON_UP_INDEX) and current_time - self.last_press > 1: 
+        if controller.button_is_pressed(index, BUTTON_UP_INDEX) and current_time - self.last_press > 1: 
             state['reverse'] = not state['reverse'] 
             self.last_press = current_time
 
 class WheelCruiseFlagStrategy(WheelControllerStrategy): 
-    def execute(self, controller, state) -> None:
+    def execute(self, controller, state, index) -> None:
         current_time = time.time()
-        if controller.button_is_pressed(controller.index, BUTTON_DOWN_INDEX) and current_time - self.last_press > 1: 
+        if controller.button_is_pressed(index, BUTTON_DOWN_INDEX) and current_time - self.last_press > 1: 
             state['cruise'] = not state['cruise']
             state['cruise_throttle']= state['throttle']
             self.last_press = current_time
               
 class WheelLightFlagStrategy(WheelControllerStrategy): 
-    def execute(self, controller, state) -> None:
+    def execute(self, controller, state, index) -> None:
         current_time = time.time()
-        if controller.button_is_pressed(controller.index, BUTTON_A_INDEX) and current_time - self.last_press > 1: 
+        if controller.button_is_pressed(index, BUTTON_A_INDEX) and current_time - self.last_press > 1: 
             state['light'] = not state['light'] 
             self.last_press = current_time 
 
 class WheelSafeFlagStrategy(WheelControllerStrategy): 
-    def execute(self, controller, state) -> None:
+    def execute(self, controller, state, index) -> None:
         current_time = time.time()
-        if controller.button_is_pressed(controller.index, BUTTON_XBOX_INDEX) and current_time - self.last_press > 1: 
+        if controller.button_is_pressed(index, BUTTON_XBOX_INDEX) and current_time - self.last_press > 1: 
             state['safe'] = not state['safe']
             self.last_press = current_time 
             

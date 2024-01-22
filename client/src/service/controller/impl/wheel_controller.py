@@ -57,6 +57,7 @@ class WheelController(ServiceModule, Controller):
                     self.terminate()  
         except Exception: 
             print('Device not connected!')
+            self.terminate() 
             os._exit(0) 
 
     def normalize_steering(self, y_axis_signal) -> float:
@@ -78,8 +79,8 @@ class WheelController(ServiceModule, Controller):
         while not self.done: 
             if self.controller.logi_update(): # update every frame 
                 state_engines = self.controller.get_state_engines(int(self.index)) # get input from the wheel controller
-                throttle = self.normalize_throttle(state_engines.contents.lX) 
-                steering = self.normalize_steering(state_engines.contents.lY)
+                throttle = self.normalize_throttle(state_engines.contents.lY) 
+                steering = self.normalize_steering(state_engines.contents.lX)
 
                 self.state['throttle'] = throttle 
                 self.state['steering'] = steering 

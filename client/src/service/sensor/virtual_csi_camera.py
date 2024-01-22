@@ -44,7 +44,7 @@ class VirtualCSICamera(ServiceModule):
         self.cameras.append(camera) 
 
     def init_csi(self) -> None: 
-        for i in range(len(self.cameras)): 
+        for i in range(4): 
             self.init_camera(i) 
 
         print('CSI Camera Activated')        
@@ -85,6 +85,7 @@ class VirtualCSICamera(ServiceModule):
                     
         except Exception as e: 
             print(e)
+            self.terminate() 
         
 if __name__ == "__main__": 
     vc = VirtualCSICamera(1) 

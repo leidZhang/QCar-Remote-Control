@@ -11,6 +11,7 @@ from common.service_module import ServiceModule
 class VirtualSpawn(ServiceModule): 
     def __init__(self, mode, traffic, start_node, end_node) -> None:
         self.mode = mode 
+        self.id = 0 # temp hard code
         self.traffic = traffic 
         self.start_node = int(start_node) 
         self.end_node = int(end_node) # place holder attribute setting 
@@ -31,15 +32,17 @@ class VirtualSpawn(ServiceModule):
     def init_virtual_environment(self): 
         desired_nodes = [self.start_node, self.end_node] # [start_node, end_node] 
 
-        # generate pathway to get the correct direction 
+        # generate pathway to get the correct direction, repeat after generating a new car?  
         self.road_map = RoadMap(self.traffic) 
-        closed_circuit = self.road_map.generate_waypoints(desired_nodes, factor = 10)
-        pathway = self.road_map.pathway
-        waypoint_list = self.road_map.waypoint_list
+        _ = self.road_map.generate_waypoints(desired_nodes, factor = 10)
+        _ = self.road_map.pathway
+        _ = self.road_map.waypoint_list
         # connect to QLab
         self.qlabs_workspace = QLabsWorkspace(self.road_map) 
-        position, orientation = self.qlabs_workspace.spawnVehicle(self.start_node)
-        # qlabs_workspace.spawnRoadPoints() # used for generate path 
+        _, _ = self.qlabs_workspace.spawnVehicle(self.start_node, self.id) # spawn vehicle id 
+        # self.qlabs_workspace.spawnRoadPoints() # used for generate path 
+        
+    def generate_qcar(self): 
         # Launch the spawn models for the QCar
         relative_path = "dependencies/rt-win64/QCar_Workspace_5.rt-win64" 
         file_path = os.path.abspath(relative_path) 
@@ -48,16 +51,17 @@ class VirtualSpawn(ServiceModule):
         print("QCar spawned!")
     
     def terminate(self) -> None:
-        self.done = True  
+        self.qlabs_workspace.terminate() 
     
     def run(self) -> None:
         self.init_virtual_environment() 
-        self.terminate() 
+        self.generate_qcar() 
+        self.done = True 
 
-# if __name__ == "__main__": 
-#     mode = 'local'
-#     traffic = "right" 
-#     start_node = '9' 
-#     end_node = '16' 
-#     v = VirtualSpawn(mode, traffic, start_node, end_node) 
-#     v.run() 
+if __name__ == "__main__": 
+    mode = 'local'
+    traffic = "right" 
+    start_node = '10' 
+    end_node = '16' 
+    v = VirtualSpawn(mode, traffic, start_node, end_node) 
+    v.run() 

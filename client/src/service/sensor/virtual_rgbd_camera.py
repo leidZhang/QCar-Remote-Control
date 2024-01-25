@@ -15,7 +15,7 @@ class VirtualRGBDCamera(ServiceModule):
         self.counter = -1 
 
     def is_valid(self) -> bool:
-        return self.mode == 1 
+        return self.mode
     
     def terminate(self) -> None:
         self.done = True 

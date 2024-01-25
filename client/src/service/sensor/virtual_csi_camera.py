@@ -21,11 +21,11 @@ class VirtualCSICamera(ServiceModule):
         self.orientation = np.array([[ 0, 0, 1], [ 1, 0, 0], [ 0, -1, 0]], dtype = np.float64)
         
     def is_valid(self) -> bool:
-        return self.mode == 1 
+        return self.mode 
 
     def terminate(self) -> None: 
         self.done = True 
-        for i in range(4): 
+        for i in range(len(self.cameras)): 
             self.cameras[i].terminate() 
         print("CSI cameras terminated") 
 
@@ -85,7 +85,6 @@ class VirtualCSICamera(ServiceModule):
                     
         except Exception as e: 
             print(e)
-            self.terminate() 
         
 if __name__ == "__main__": 
     vc = VirtualCSICamera(1) 

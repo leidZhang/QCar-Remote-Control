@@ -152,11 +152,17 @@ function handleApply() {
     
 }
 
+function handleExit() {
+    pywebview.api.quit(); 
+}
+
 function handleSubmit() {
     data = handleApply(); 
     pywebview.api.apply_setting(data); 
     filter = handleFilter(); 
     pywebview.api.apply_filter(filter); 
+
+    handleExit() 
 }
 
 window.onload = function() {

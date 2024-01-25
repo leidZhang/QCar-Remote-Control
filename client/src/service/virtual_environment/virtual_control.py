@@ -5,8 +5,9 @@ import numpy as np
 import queue  
 # quanser packages 
 sys.path.append('dependencies/q_libs') # start from project root 
+from numpy.core.numeric import zeros_like 
 from lib_qcar import QCar
-from lib_utilities import GPS, Calculus 
+from lib_utilities import RoadMap, QLabsWorkspace
 # custom scripts 
 sys.path.append('src/') 
 from common.service_module import ServiceModule 
@@ -16,15 +17,18 @@ from strategies.virtual_control_strategies import VirtualCruiseStrategy
 from strategies.virtual_control_strategies import VirtualLightStrategy 
 
 class VirtualControl(ServiceModule): 
-    def __init__(self, mode) -> None:
-        self.mode = mode  
+    def __init__(self, traffic, start_node, end_node) -> None:
+        self.style = traffic
+        self.status = False 
         self.rate = 50 # placeholder rate 
         self.done = False 
-        self.start_time = time.time() 
-
         self.LEDs = np.array([0, 0, 0, 0, 0, 0, 0, 0])
         self.my_car = None # QCarTask(frequency=int(self.rate), hardware=0)
+        self.qlabs_workspace = None 
+        self.road_map = None 
         self.state = None 
+        self.start_node = start_node
+        self.end_node = end_node # place holder attribute setting 
 
         self.virtual_qcar_strategies = [
             VirtualCruiseStrategy(), 
@@ -32,9 +36,27 @@ class VirtualControl(ServiceModule):
             VirtualSafeStrategy(), 
             VirtualLightStrategy(),
         ]
+            
+    def init_virtual_environment(self): 
+        start_node = int(self.start_node) 
+        end_node = int(self.end_node)
+        desired_nodes = [start_node, end_node] # [start_node, end_node] 
 
-    def elapsed_time(self) -> None:
-        return time.time() - self.start_time
+        # generate pathway to get the correct direction 
+        self.road_map = RoadMap(self.style) 
+        closed_circuit = self.road_map.generate_waypoints(desired_nodes, factor = 10)
+        pathway = self.road_map.pathway
+        waypoint_list = self.road_map.waypoint_list
+        # connect to QLab
+        self.qlabs_workspace = QLabsWorkspace(self.road_map) 
+        position, orientation = self.qlabs_workspace.spawnVehicle(self.start_node)
+        # qlabs_workspace.spawnRoadPoints() # used for generate path 
+        # Launch the spawn models for the QCar
+        relative_path = "dependencies/rt-win64/QCar_Workspace_5.rt-win64" 
+        file_path = os.path.abspath(relative_path) 
+        os.startfile(file_path)
+        time.sleep(2)
+        print("QCar spawned!")
 
     def handle_LEDs(self) -> None: 
         if self.state['steering'] > 0.3: 
@@ -51,16 +73,17 @@ class VirtualControl(ServiceModule):
         print("Virtual Control terminated") 
 
     def is_valid(self) -> bool:
-        return self.mode != "remote"
+        if self.start_node == "" or self.end_node == "": 
+            return False 
+        return True 
     
     def run(self, local_queue) -> None:
         print("activating virtual environment control...") 
         
-        try:  
+        try: 
+            self.init_virtual_environment() 
             self.my_car = QCar(hardware=0) 
-
-            # diff = Calculus().differentiator_variable(1 / self.rate) 
-            # _ = next(diff)
+            self.status = True 
 
             while not self.done: 
                 if not local_queue.empty(): 
@@ -74,31 +97,30 @@ class VirtualControl(ServiceModule):
                     steering = 0.5 * self.state['steering']
                     # handle LEDs 
                     self.handle_LEDs() 
-                    
-                    # apply state and get readings 
-                    self.my_car.read_write_std(np.array([throttle, steering]), self.LEDs)
-                    # encoder_speed = diff.send((encoder_counts, time_step))
-                    # speed = self.my_car.estimate_speed(encoder_speed, steering)    
- 
+
+                    self.my_car.read_write_std(np.array([throttle, steering]), self.LEDs) 
+
+                    os.system("cls") 
+                    print(self.state) 
         except Exception as e: 
             print(e) 
         finally: 
             self.my_car.terminate() 
             os._exit(0) 
 
-# if __name__ == "__main__": 
-#     q = queue.Queue(10)
-#     state = {
-#             'throttle': 0.1, 
-#             'steering': 0, 
-#             'cruise_throttle': 0, 
-#             'control_flags': {
-#                 'safe': False, 
-#                 'reverse': False, 
-#                 'light': False, 
-#                 'cruise': False, 
-#             }
-#         }
-#     q.put(state)  
-#     v = VirtualControl("10") 
-#     v.run(q) 
+if __name__ == "__main__": 
+    q = queue.Queue(10)
+    state = {
+            'throttle': 0.1, 
+            'steering': 0, 
+            'cruise_throttle': 0, 
+            'control_flags': {
+                'safe': False, 
+                'reverse': False, 
+                'light': False, 
+                'cruise': False, 
+            }
+        }
+    q.put(state)  
+    v = VirtualControl("10") 
+    v.run(q) 

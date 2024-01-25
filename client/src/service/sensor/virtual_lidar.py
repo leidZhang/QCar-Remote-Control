@@ -15,7 +15,7 @@ class VirtualLidar(ServiceModule):
         self.lidar = None 
 
     def is_valid(self) -> bool:
-        return self.mode == 1 
+        return self.mode 
     
     def terminate(self) -> None:
         self.done = True

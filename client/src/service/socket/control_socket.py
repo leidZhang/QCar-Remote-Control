@@ -7,8 +7,7 @@ from common.service_module import ServiceModule
 from common.utils import handle_full_queue  
 
 class ControlSocket(ServiceModule): 
-    def __init__(self, mode, ip, port) -> None: 
-        self.mode = mode 
+    def __init__(self, ip, port) -> None: 
         self.host_name = ip 
         self.port = port  
         self.done = False 
@@ -18,12 +17,8 @@ class ControlSocket(ServiceModule):
         self.done = True 
 
     def is_valid(self) -> bool:
-        if self.mode == "local": 
-            return False 
-
         if self.host_name is None or self.port is None: 
             return False 
-        
         return True 
     
     def run(self, queue_lock, control_queue, response_queue) -> None:
@@ -36,8 +31,11 @@ class ControlSocket(ServiceModule):
                 queue_lock.acquire() 
 
                 try: 
+                    # print(control_queue.empty()) 
+
                     if not control_queue.empty(): 
                         data = control_queue.get() # get dict object
+                        print(data)
                         queue_lock.release() 
                         self.socket.sendall(pickle.dumps(data)) 
 
@@ -50,8 +48,8 @@ class ControlSocket(ServiceModule):
                         # Handle the case where the server closes the connection unexpectedly
                         print("Server connection reset. Reconnecting...")
                         self.terminate()  # Close the socket
-                        self.socket = socket(AF_INET, SOCK_STREAM)
-                        self.socket.connect((self.host_name, self.port))
+                        self.clientSocket = socket(AF_INET, SOCK_STREAM)
+                        self.clientSocket.connect((self.host_name, self.port))
         except Exception as e:
             print("An error occurred: {}".format(e))
             self.terminate()

@@ -8,9 +8,6 @@ class Api:
         self.file_path = "src/ui/json/setting.json"
         self.window = None 
 
-    def quit(self) -> None: 
-        self.window.destroy() 
-
     def apply_filter(self, filter) -> None: 
         for key, val in filter.items(): 
             self.data[key] = val 
@@ -19,6 +16,10 @@ class Api:
         self.data = data 
         with open(self.file_path, "w") as json_file: 
             json.dump(self.data, json_file) 
+
+        print("Settings applied, please restart the program") 
+        self.window.destroy() 
+        os._exit(0) 
  
     def load_json(self) -> dict: 
         try: 

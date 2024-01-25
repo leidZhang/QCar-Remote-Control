@@ -79,8 +79,7 @@ class WheelController(ServiceModule, Controller):
     def run(self, queue_lock, remote_queue, local_queue) -> None:
         print('activating wheel controller...')
         self.controller.steering_initialize(False) 
-        # self.check_device() # make sure the correct controller is listened 
-        print(f"Device connection: {self.controller.is_connected(int(self.index))}")
+        self.check_device() # make sure the correct controller is listened 
 
         while not self.done: 
             if self.controller.logi_update(): # update every frame 

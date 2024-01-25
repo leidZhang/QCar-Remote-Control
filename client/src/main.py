@@ -5,7 +5,7 @@ import json
 
 sys.path.append('src/') 
 from ui.init_ui import InitUI
-from service.manager.service_manager import ServiceManager, WheelController
+from service.manager.service_manager import ServiceManager
 
 if __name__ == "__main__": 
     try: 

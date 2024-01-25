@@ -1,0 +1,1 @@
+{"csi_camera": false, "rgbd_camera": false, "lidar": false, "operation_mode": "remote", "controller": "wheel", "traffic": "right", "video": "qcar", "spawn_node": "", "destination_node": "", "port": "8080", "ip": "192.168.2.15", "device": "0"}

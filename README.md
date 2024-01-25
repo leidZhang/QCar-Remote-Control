@@ -63,7 +63,7 @@ port: 8080
 ip: 192.168.2.15
 device: 0
 ```
-4b. You can use the command `python3 src/main.py reset` to use GUI to change the setting, once the changes applied, the program will stop
+4b. You can use the command `python3 src/main.py reset` to use GUI to change the setting, once the changes applied, the program will stop <br>
 5. You can run the main component and start control now
 
 ### Note 

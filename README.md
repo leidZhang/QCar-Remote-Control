@@ -45,10 +45,9 @@ sudo python3 main.py
 3. On your workstation, navigate to the project folder and use the following command to run the client:
 ```
 cd client
-cd src
-python3 main.py
+python3 src/main.py
 ```
-4. Once the client side is running, you'll see the text like following prompt in the terminal:
+4a. Once the client side is running, you'll see the text like following prompt in the terminal:
 ```
 The following is your initial setting: 
 csi_camera: False
@@ -63,9 +62,9 @@ destination_node: 50
 port: 8080
 ip: 192.168.2.15
 device: 0
-Do you wish to use this setting? [y/n]
 ```
-5. enter 'n' to enter the GUI to set up the system or enter 'y' to run the main component and start control
+4b. You can use the command `python3 src/main.py reset` to use GUI to change the setting, once the changes applied, the program will stop
+5. You can run the main component and start control now
 
 ### Note 
 1. Sometimes the device connected to the workstation is identified as device 1, make sure the correct device is being listened.

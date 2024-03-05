@@ -9,6 +9,7 @@ from service.manager.service_manager import ServiceManager
 
 if __name__ == "__main__": 
     try: 
+        service_manager = None 
         file_path = "src/ui/json/setting.json"
         with open(file_path, "r") as json_file: 
             data = json.load(json_file)
@@ -33,7 +34,9 @@ if __name__ == "__main__":
             print("Invalid input!") 
     except KeyboardInterrupt: 
         done = True 
-        service_manager.terminate()  
+        service_manager.terminate() 
+    except Exception as e: 
+        print(e)
     finally: 
         print("System stopped") 
         os._exit(0) # exit the program 

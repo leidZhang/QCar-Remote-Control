@@ -65,9 +65,9 @@ class ServiceManager(ServiceModule):
         } 
 
         self.sensors = {
-            'csi_camera': VirtualCSICameraStrategy(settings['csi_camera']), 
+            #'csi_camera': VirtualCSICameraStrategy(settings['csi_camera']), 
             'rgbd_camera': VirtualRGBDCameraStrategy(settings['rgbd_camera']), 
-            'lidar': VirtualLidarStrategy(settings['lidar']), 
+            #'lidar': VirtualLidarStrategy(settings['lidar']), 
             # 'gps': VirtualGPSStrategy(settings['operation_mode']),
         }
 
@@ -99,10 +99,12 @@ class ServiceManager(ServiceModule):
             else: 
                 self.init_strategies[key] = None 
 
-        virtual_spawn = self.init_strategies['virtual_spawn'].target
+        virtual_spawn = None 
+        if self.init_strategies['virtual_spawn']: 
+            virtual_spawn = self.init_strategies['virtual_spawn'].target
         for thread in self.threads:  
             thread.start() 
-            while thread.name == 'Virtual-Spawn' and not virtual_spawn.done: 
+            while virtual_spawn != None and thread.name == 'Virtual-Spawn' and not virtual_spawn.done: 
                 time.sleep(5) 
 
         print("activated threads:", len(self.threads))

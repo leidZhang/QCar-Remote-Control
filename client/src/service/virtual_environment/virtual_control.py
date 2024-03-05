@@ -61,10 +61,10 @@ class VirtualControl(ServiceModule):
 
             # diff = Calculus().differentiator_variable(1 / self.rate) 
             # _ = next(diff)
-            file_path = './output/control.txt' 
-            if os.path.exists(file_path): 
-                os.remove(file_path) 
-            output_file = open(file_path, 'w') 
+            # file_path = './output/control.txt' 
+            # if os.path.exists(file_path): 
+            #     os.remove(file_path) 
+            # output_file = open(file_path, 'w') 
 
             while not self.done: 
                 if not local_queue.empty(): 
@@ -74,29 +74,41 @@ class VirtualControl(ServiceModule):
                     for strategy in self.virtual_qcar_strategies: 
                         strategy.execute(self) 
                     # handle control
-                    throttle = 0.3 * 0.15 * self.state['throttle'] # config here 
+                    throttle = 0.3 * self.state['throttle'] # config here 
                     steering = 0.5 * self.state['steering']
                     # handle LEDs 
                     self.handle_LEDs() 
+
+                    os.system("cls") 
+                    print(self.state) 
                     
                     # apply state and get readings 
                     self.my_car.read_write_std(np.array([throttle, steering]), self.LEDs) 
-                    output_file.write(f"throttle:{throttle}\tsteering:{steering}\n") 
+                    # output_file.write(f"throttle:{throttle}\tsteering:{steering}\n") 
                     # encoder_speed = diff.send((encoder_counts, time_step))
                     # speed = self.my_car.estimate_speed(encoder_speed, steering)    
+                    # os.system("cls") 
+                    # print(f"throttle:{throttle}\tsteering:{steering}\n") 
  
         except Exception as e: 
             print(e) 
         finally: 
             self.my_car.terminate() 
-            output_file.close() 
+            # output_file.close() 
             os._exit(0) 
 
 # if __name__ == "__main__": 
+#     mode = 'local'
+#     traffic = "right" 
+#     start_node = '10' 
+#     end_node = '16' 
+#     v = VirtualSpawn(mode, traffic, start_node, end_node) 
+#     v.run() 
+
 #     q = queue.Queue(10)
 #     state = {
 #             'throttle': 0.1, 
-#             'steering': 0, 
+#             'steering': 0.2, 
 #             'cruise_throttle': 0, 
 #             'control_flags': {
 #                 'safe': False, 
@@ -107,4 +119,5 @@ class VirtualControl(ServiceModule):
 #         }
 #     q.put(state)  
 #     v = VirtualControl("10") 
-#     v.run(q) 
+#     v.my_car = QCar(hardware=0) 
+#     v.my_car.read_write_std(np.array([0.1, 0.2]), np.array([0, 0, 0, 0, 0, 0, 0, 0])) 

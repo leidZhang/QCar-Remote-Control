@@ -324,6 +324,8 @@ class QCar():
         self.write_other_buffer_str_LEDs[0] = -saturate(mtr_cmd[1], 0.5, -0.5)
         self.write_other_buffer_str_LEDs[1:9] = LEDs
         
+        # print(self.write_pwm_channel_throttle)
+        print(mtr_cmd) 
         # IO
         try:
             if True:

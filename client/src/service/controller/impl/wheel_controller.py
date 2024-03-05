@@ -1,6 +1,8 @@
 import os 
 import sys 
 import time 
+import queue
+import threading 
 from logidrivepy import LogitechController
 
 sys.path.append('src/') 
@@ -97,6 +99,15 @@ class WheelController(ServiceModule, Controller):
                 handle_full_queue(local_queue, self.state)
                 queue_lock.release()
  
+if __name__ == "__main__": 
+    try: 
+        q1 = queue.Queue(10) 
+        q2 = queue.Queue(10) 
+        k = WheelController("wheel", "0")
+        l = threading.Lock() 
 
+        k.run(l, q1, q2) 
+    except KeyboardInterrupt: 
+        k.terminate() 
                 
     

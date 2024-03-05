@@ -22,7 +22,8 @@ class VirtualGPS(ServiceModule):
         self.sleep_time = 0.18 
 
     def is_valid(self) -> bool:
-        return self.mode != 'remote' 
+        # return self.mode != 'remote' 
+        return False
     
     def get_gps_state(self) -> tuple:  
         position_x = self.gps.position[0] 
